@@ -1,0 +1,468 @@
+% !TeX program = xelatex
+\documentclass{article}
+\usepackage{graphicx}
+\usepackage{amsthm}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{tikz,pgfplots}
+\pgfplotsset{compat=1.18}
+\usetikzlibrary{positioning, automata}
+\usepackage{hyperref}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+
+% Remove all \End commands  
+\algnotext{EndIf}
+\algnotext{EndFor}
+\algnotext{EndWhile}
+\algnotext{EndLoop}
+\algnotext{EndForAll}
+\algnotext{EndRepeat}
+\algnotext{EndProcedure}
+\algnotext{EndFunction}
+\algnotext{Function}
+
+\usepackage{tcolorbox}
+\usepackage{xcolor} 
+\usepackage{fontspec}
+\usepackage{libertinus}
+%\usepackage{calrsfs}
+\usepackage[greek, english]{babel} % Load Greek language support
+\usepackage{mathtools}
+\usetikzlibrary{arrows,positioning, calc}
+\tikzstyle{vertex}=[draw,fill=white,circle,minimum size=20pt,inner sep=0pt]
+%\usetikzlibrary{graphdrawing}
+\usetikzlibrary{shapes.geometric, arrows}
+\usepackage{listings}
+\usepackage{fancyhdr}
+
+% Custom section title formatting
+\newcommand{\sectiontitle}[1]{%
+  \vspace{1.5em}%
+  \noindent{\Large\bfseries\emph{#1}}\par%
+  \vspace{0.5em}%
+}
+
+\pagestyle{fancy}
+\fancyhf{}  % clear all fields
+
+% Headers for subsequent pages
+\lhead{Συντομότερα Μονοπάτια}
+\rhead{\includegraphics[width=0.2\textwidth]{UniWA logo 2.png}}
+\cfoot{}  % remove page numbers
+
+% Remove headers on first page
+\fancypagestyle{firstpage}{
+  \fancyhf{}  % clear all headers and footers
+  \cfoot{} 
+  \renewcommand{\headrulewidth}{0pt} 
+}
+
+
+
+
+\usetikzlibrary{shapes,decorations,decorations.pathreplacing,arrows,calc,arrows.meta,fit,positioning}
+
+\tikzset{
+    auto,node distance =1 cm and 1 cm, semithick,
+    state/.style ={ellipse, draw, minimum width = 0.7 cm},
+    point/.style = {circle, draw, inner sep=0.04cm,fill,node contents={}},
+    bidirected/.style={Latex-Latex,dashed},
+    directed/.style={-Latex}, % use this style when you need arrows
+    el/.style = {inner sep=2pt, align=left, sloped}
+}
+
+
+\let\MakeUppercase\relax
+
+
+% Redefine Function command to omit the "Function" prefix - start only (no end)
+\algdef{S}[FUNCTION]{Function}%
+   [2]{\textproc{#1}\ifthenelse{\equal{#2}{}}{}{(#2)}}%
+
+% Redefine line number presentation
+\algrenewcommand\alglinenumber[1]{\ifnum#1=0\else\footnotesize #1\fi} % Hide line 0
+
+
+% Define custom colors
+\definecolor{myyellow}{RGB}{255,255,150}
+
+% Define algorithmic environment inside a yellow-colored box
+\newenvironment{yellowalgo}{
+    \begin{tcolorbox}[colback=myyellow, colframe=myyellow, boxrule=0.5pt]
+    \begin{algorithmic}[1]
+    \setcounter{ALG@line}{-1}
+}{
+    \end{algorithmic}
+    \end{tcolorbox}
+}
+
+\addto\captionsenglish{\renewcommand{\chaptername}{Κεφάλαιο}}
+% Commands to toggle end statements in yellowalgo
+
+
+
+% Custom command for function names
+\newcommand{\Func}[1]{\textproc{#1}}
+
+\renewcommand{\L}{\mathcal{L}}
+\newcommand{\Create}{\textbf{Create} }
+\DeclareMathOperator{\argmax}{argmax}
+\DeclareMathOperator{\argmin}{argmin}
+\newcommand{\True}{\texttt{True}}
+\newcommand{\False}{\texttt{False}}
+
+% Redefine the theorem environment to use normal font for the body text
+\makeatletter
+\def\th@plain{%
+    \thm@notefont{}% same as heading font
+    \normalfont % body font
+}
+
+
+\makeatother
+\newtheorem{fig}{Figure}
+\newtheorem{obs}{Παρατήρηση}
+\newtheorem{cor}{Πόρισμα}
+
+\title{Συντομότερα Μονοπάτια}
+\author{}
+\date{}
+\begin{document}
+\maketitle
+\thispagestyle{firstpage}
+\vspace{1em}
+\noindent
+\begin{minipage}[t]{0.48\textwidth}
+    \raggedright\textbf{Αναστάσης Κολιόπουλος}\\
+    22390097
+\end{minipage}\hfill
+\begin{minipage}[t]{0.48\textwidth}
+    \raggedleft\textbf{Δημήτρης Βογιατζής}\\
+    22390015
+\end{minipage}
+\vfill
+\begin{center}
+    \includegraphics[width=0.35\textwidth]{UniWA logo.png}
+\end{center}
+\vspace{0.5cm}
+\newpage
+
+\sectiontitle{Εισαγωγή - Βασικές έννοιες}
+\noindent
+Στην παρούσα εργασία, θα παρουσιάσουμε τέσσερις βασικούς αλγορίθμους εύρεσης συντομότερων
+μονοπατιών σε γραφήματα. Πριν όμως προχωρήσουμε στην ανάπτυξή τους, εισάγουμε τις εξής βασικές έννοιες.
+\\ \\
+Ένα \emph{κατευθυνόμενο γράφημα} $G$, είναι ένα διατεταγμένο ζεύγος $(V, E)$, όπου το $G.V$ αποτελεί \emph{το σύνολο των κορυφών} του γραφήματος και το $G.E$ \emph{το σύνολο
+των ακμών} του. Για απλότητα θεωρούμε ότι $|G.V| = n$ και $|G.E| = m$ και ότι η ετικέτα κάθε κορυφής είναι ένας αριθμός του συνόλου $[n]$. 
+Μία \emph{ακμή} $e \in G.E$, είναι ένα διατεταγμένο ζεύγος $(v, u)$, το οποίο δεικτοδοτεί ότι ο κόμβος $v$ προσπίπτει στον κόμβο $u$. 
+Ορίζουμε, επίσης, ότι
+\begin{align*}
+    N^+(v) = \left\{u \in G.V : (v, u) \in G.E \right\}
+\end{align*}
+και επιπλέον
+\begin{align*}
+    N^-(v) = \left\{u \in G.V : (u, v) \in G.E \right\}.
+\end{align*}
+Ορίζουμε ως \emph{μονοπάτι} μία ακολουθία $V = \langle v_1, v_2, \dots, v_k \rangle$ κορυφών, τέτοια ώστε για κάθε $i \in \{1, \dots, k - 1\}$ ισχύει ότι $v_{i + 1} \in N^{+}(v_i)$ και επιπλέον για κάθε $1 \leq i < j \leq k$, $v_i \neq v_j$. Αν δεν ισχύει η τελευταία προϋπόθεση,
+τότε έχουμε \emph{κύκλο}. Ένα \emph{ΚΑΓ} είναι ένα κατευθυνόμενο γράφημα χωρίς κύκλο. Ορίζουμε τη \emph{συνάρτηση βάρους} $w : E \to \mathbb{R}$, η οποία αναπαριστά το κόστος μετακίνησης μεταξύ δύο κορυφών $(v, u) \in G.E$. Θεωρούμε ότι τα γραφήματα που εκτελούνται οι αλγόριθμοι που θα
+παρουσιαστούν στη συνέχεια δεν περιέχουν \emph{αρνητικό κύκλο}. Ισχύει δηλαδή ότι δεν υπάρχει ακολουθία κορυφών $V = \langle v_1, v_2, \dots, v_k \rangle$, τέτοια ώστε
+\begin{align*}
+    w(V) = \sum_{i = 0}^{k - 1} w(v_i, v_{i + 1}) < 0.
+\end{align*}
+\noindent
+Ένα \emph{συντομότερο μονοπάτι}, έστω $V_{\text{shortest}}$, είναι ένα μονοπάτι το οποίο ελαχιστοποιεί το κόστος μετακίνησης από τη κορυφή $v_1 = s$ στη $v_k = t$. Ισχύει, δηλαδή, ότι 
+\begin{align*}
+    w\left(V_{\text{shortest}}\right) \leq w(V),
+\end{align*}
+για οποιοδήποτε άλλο μονοπάτι $V \neq V_{\text{shortest}}$, το οποίο έχει ίδια αφετηριακή και τελική κορυφή με το $V_{\text{shortest}}$. Στην εργασία αυτή θα ασχοληθούμε με την εύρεση του κόστους ενός συντομότερου μονοπατιού
+και όχι με την εύρεση του ίδιου του μονοπατιού.
+\newpage
+\sectiontitle{Συντομότερα μονοπάτια σε ΚΑΓ}
+\noindent
+Η πιο απλοϊκή μορφή του προβλήματος, είναι η εύρεση των συντομότερων μονοπατιών με εναρκτήρια κορυφή την $s$, σε ένα ΚΑΓ. Αξιοποιώντας την ιδιότητα
+ότι το γράφημα είναι άκυκλο, μπορούμε να χρησιμοποιήσουμε \emph{Δυναμικό Προγραμματισμό}, κάνοντας αρχικά μία σημαντική παρατήρηση. 
+\begin{obs}
+    Έστω $V_{\text{shortest}} = \langle v_1, v_2, \dots, v_k \rangle$ ένα συντομότερο μονοπάτι από την $s$ στη $v$ ($v_1 = s, v_k = v$). Ορίζουμε την ακολουθία $V^R_{\text{shortest}}$ τέτοια ώστε $v^R_{i} = v_{k - i + 1}$ 
+    και επιπλέον για κάθε $i \in \{1, \dots, k - 1\}$, $v^R_{i + 1} \in N^-\left(v^R_i\right)$. Στον παρακάτω αλγόριθμο αξιοποιούμε το γεγονός ότι 
+    \begin{equation*}
+        \sum_{i = 1}^{k - 1} w(v_i, v_{i + 1}) = \sum_{i = 1}^{k - 1} w\left(v^R_{i + 1},  v^R_{i}\right).
+    \end{equation*}
+    \label{rev}
+\end{obs}
+\noindent
+Τα πέντε στάδια του ΔΠ εξειδικεύονται ως εξής. 
+\begin{itemize}
+    \item (Ορισμός υποπροβλημάτων). Ορίζουμε ως $D(v)$, όπου $v \in G.V$, το πρόβλημα εύρεσης του συντομότερου μονοπατιού από την κορυφή $v$ προς την κορυφή $s$. 
+    Έστω $d_v$ η λύση του υποπροβλήματος αυτού.
+    \item (Καθορισμός επιλογών). Αν βρισκόμαστε σε μία δεδομένη κορυφή $v \neq s$ μπορούμε να μεταβούμε σε οποιαδήποτε κορυφή $u \in N^-(v)$, πληρώνοντας
+    κόστος $w(u, v)$. Αν $v = s$ είμαστε στον προορισμό μας. 
+    \item  (Ορισμός αναδρομικής σχέσης). Ακολουθεί η αναδρομική σχέση που προκύπτει από τις παραπάνω επιλογές.
+    \begin{align*}
+        d_v = 
+        \begin{cases}
+            0, & v = s, \\
+            \min_{u \in N^-(v)}\left\{d_u + w(u, v)\right\}, & v \in G.V \setminus \{s\}.
+        \end{cases}
+    \end{align*}
+    \item  (Σειρά επίλυσης υποπροβλημάτων). Τα υποπροβλήματα επιλύονται κατά τοπολογική σειρά.
+    \item (Επίλυση αρχικού προβλήματος). Οι τιμές $d_1, d_2, \dots, d_n$. 
+\end{itemize}
+
+\begin{yellowalgo}
+    \Function{Shortest-Path-in-DAG}{$G, s$}
+        \For{\textbf{all} $v \in G.V \setminus \{s\}$}
+            \State $D[v] \gets \infty;$
+        \EndFor
+        \State $D[s] \gets 0;$
+        \State Διατάσσουμε τις κορυφές του συνόλου $G.V$ σε τοπολογική σειρά$;$ 
+        \For{\textbf{all} $v \in G.V$}
+            \For{\textbf{all} $u \in N^-(v) $}
+                \If{$D[u] + w(u, v) < D[v]$}
+                    \State $D[v] \gets D[u] + w(u, v);$
+                \EndIf
+            \EndFor
+        \EndFor
+        \State \Return $D;$
+    \EndFunction
+\end{yellowalgo}
+\noindent
+Η χρονική πολυπλοκότητα του ανωτέρω αλγορίθμου, χωρίς το κομμάτι της τοπολογικής ταξινόμησης, περιγράφεται από τη συνάρτηση
+\begin{align*}
+    T\left(|G.V|, |G.E|\right) &\leq c_1 \cdot \left(|G.V| - 1 \right) + c_2 \cdot \sum_{v \in G.V} |N^-(v)| + c_3 \\
+    &\leq c_1 \cdot |G.V| + c_2 \cdot |G.E| + c_3 \\
+    &= c_1 \cdot n + c_2 \cdot m + c_3 \\
+    &\leq c_4 \cdot (n + m)  & c_4  = \max\{c_1, c_2\} + c_3 + 1 \\
+    &= \mathcal{O}(n + m).
+\end{align*}
+Αυτή είναι κα η τελική ασυμπτωτική συμπεριφορά, για τον λόγο του ότι ο χρόνος της τοπολογικής ταξινόμησης είναι γραμμικός στο πλήθος των κορυφών και των ακμών του γραφήματος.
+
+
+\sectiontitle{Ο αλγόριθμος του Dijkstra}
+\noindent
+Σε περίπτωση που το γράφημα δεν είναι ΚΑΓ, αλλά οι ακμές του έχουν θετικά βάρη, χρησιμοποιούμε τον αλγόριθμο του Dijkstra. Η ιδέα που ακολουθεί ο Dijkstra είναι σε κάθε επανάληψη να επιλέγει την κορυφή 
+που απέχει τη μικρότερη απόσταση από την αφετηρία να την \emph{οριστικοποιεί} και να χαλαρώνει τις ακμές που εκκινούν από την κορυφή αυτή. Όταν μία κορυφή είνα οριστικοποιημένη, σημαίνει ότι έχει υπολογιστεί η τελική
+της απόσταση από την αφετηριακή κορυφή.  
+\begin{yellowalgo}
+\Function{Dijkstra}{$G, s$}
+    \For{\textbf{all} $v \in G.V \setminus \{s\}$}
+        \State $D[v] \gets \infty;$
+    \EndFor
+    \State $D[s] \gets 0;$
+    \State $S \gets \emptyset;$
+    \While{$S \neq G.V$} % $i \gets 1; \; i \leq n - 1; \; i++$
+        \State $v \gets {\arg\min}\left\{D[u] : u \in G.V \setminus S\right\};$
+        \State $S \gets S \cup \{v\};$
+        \For{\textbf{all} $u \in N^+(v) \setminus S$}
+            \If{$D[v] + w(v, u) < D[u]$}
+                \State $D[u] \gets D[v] + w(v, u);$
+            \EndIf
+        \EndFor
+    \EndWhile
+    \State \Return $D;$
+\EndFunction
+\end{yellowalgo}
+\noindent 
+Για να αποδείξουμε την ορθότητα του Dijkstra, Θα χρησιμοποιήσουμε \emph{αναλλοίωτη του βρόχου}. Για την συγκεκριμένη απόδειξη ορίζουμε ως $d(v, u)$, το μήκος του συντομότερου μονοπατιού
+ από την $v$ στη $u$. 
+\\ \\
+\emph{Έναρξη.} Πρωτού αρχίσει να εκτελείται ο βρόχος της γραμμής 5, έχουμε ότι $S = \emptyset$ και επομένως η αναλλοίωτη συνθήκη ισχύει τετριμμένα. 
+\\ \\
+\emph{Διατήρηση.} Στην αρχή μίας τυχαίας επανάληψης ισχύει ότι για κάθε $u \in S, D[u] = d(s, u)$. Θα πρέπει να δείξουμε τώρα ότι στο τέλος της επανάληψης αυτής ισχύει ότι $D[v] = d(s, v)$. Έστω ότι ισχύει
+\begin{align*}
+    D[v] > d(s, v).
+\end{align*} 
+Θα πρέπει λοιπόν να υπάρχει μονοπάτι, διαφορετικό από αυτό που βρίσκει ο αλγόριθμος, το οποίο να έχει βάρος $d(s, v)$. Προσέξτε ότι αυτό δεν γίνεται να ισχύει για την $s$, για τον λόγο
+του ότι στο τέλος της πρώτης επανάληψης έχουμε $S = \{s\}$ και επομένως $D[s] = d(s, s) = 0$. Έστω $x$ η τελευταία κορυφή σε αυτό το μονοπάτι που εμπεριέχεται στο $S$ και $y$ η αμέσως επόμενη κορυφή.
+Παρατηρήστε ότι $y \neq v$, διαφορετικά θα την είχε ανακαλύψει ο Dijkstra. Έχουμε ότι
+\begin{align*}
+    D[x] + w(x, y) \leq d(s, v), 
+\end{align*}
+λόγω του ότι αμφότεροι οι κόμβοι $x, y$ προηγούνται του $v$ στο μονοπάτι και οι ακμές είναι μη αρνητικές.
+Επίσης έχουμε 
+\begin{align*}
+    D[y] \leq D[x] + w(x, y),
+\end{align*}
+διότι όταν χαλαρώσαμε την ακμή $(x, y$) εκτελέσαμε την πράξη
+\begin{align*}
+    D[y] \gets \min\{D[y], D[x] + w(x, y)\}.
+\end{align*}
+Συνδυάζοντας τις δύο παραπάνω ανισότητες παίρνουμε
+\begin{align*}
+    D[y] \leq d(s, v).
+\end{align*}
+Παρ'όλα αυτά, λόγω της πράξης της γραμμής 4 του αλγορίθμου έχουμε 
+\begin{align*}
+    D[v] \leq D[y]
+\end{align*}
+και επίσης από την υπόθεση έχουμε
+\begin{align*}
+    d(s, v) < D[v].
+\end{align*}
+Συνδυαάζοντας τις τρεις τελευταίες ανισότητες παίρνουμε 
+\begin{align*}
+    D[v] \leq D[y] \leq d(s, v) < D[v]
+\end{align*}
+(άτοπο).
+\begin{flushright}
+    $\blacksquare$
+\end{flushright}
+Η αποδοτικότερη υλοποίηση του Dijkstra πραγματοποιείται με \emph{σωρό Fibonacci} και φράζεται από τα πάνω από την κλάση $\Theta(n \lg n + m)$. Υλοποιώντας τον αλγόριθμο με δυαδικό σωρό, μπορούμε με μία αρκετά απλότερη υλοποίηση 
+να πετύχουμε πολυπλοκότητα χειρότερης περίπτωσης τάξης $\Theta((n + m) \lg n)$.
+\\ \\
+\sectiontitle{Ο αλγόριθμος των Bellman-Ford}
+\noindent
+Στην περίπτωση που το γράφημα περιέχει αρνητικά βάρη στις ακμές, ο αλγόριθμος του Dijkstra, δεν μπορεί να εφαρμοστεί. 
+Τη λύση για τη γενική περίπτωση, μας τη δίνει ο Bellman-Ford. Για την ανάπτυξή του αρχίζουμε με την εξής παρατήρηση.
+\begin{obs}
+    Ένα συντομότερο μονοπάτι περιέχει το πολύ $n - 1$ ακμές. \label{n-1}
+\end{obs}
+\noindent
+\emph{Απόδειξη.} Έστω ένα συντομότερο μονοπάτι $V_{\text{shortest}} = \langle v_1, v_2, \dots, v_k\rangle$ τέτοιο ώστε $k \geq n$. Γνωρίζουμε σίγουρα ότι υπάρχει υποακολουθία της $V$, ονομαστικά $V_{ij}$, της οποίας οι κορυφές σχηματίζουν κύκλο 
+και μάλιστα \emph{μη αρνητικό κύκλο}. Παράγουμε τη $V^*_{\text{shortest}}$, η οποία είναι ίση με $\langle v_1, v_2, \dots, v_{i}, v_{j + 1}, \dots, v_{k} \rangle$. Δεδομένου ότι 
+\begin{equation*}
+    \sum_{\ell = i}^{j} w(v_\ell, v_{\ell + 1}) \geq w(v_i, v_{j + 1}),
+\end{equation*}
+παίρνουμε ότι
+\begin{align*}
+    w\left(V_{\text{shortest}}\right) \geq w\left(V^*_{\text{shortest}}\right).
+\end{align*}
+\begin{cor}
+    Το συντομότερο μονοπάτι δεν περιέχει μη αρνητικούς κύκλους.
+\end{cor}
+\noindent
+Μπορούμε, λοιπόν, να «κόψουμε» τον κύκλο αυτόν διατηρώντας το μονοπάτι συντομότερο. Επαναλαμβάνοντας την διαδικασία για όλους τους κύκλους που εμπεριέχονται στη $V_{\text{shortest}}$, παράγουμε ένα συντομότερο μονοπάτι χωρίς κύκλους.
+Για το τελικό μονοπάτι, έστω $V'_{\text{shortest}}$, θα ισχύει ότι $1 \leq |V'_{\text{shortest}}| \leq n - 1$.
+\begin{flushright}
+    $\blacksquare$ 
+\end{flushright}
+\noindent
+Αξιοποιώντας τις Παρατηρήσεις \ref{rev} και \ref{n-1} ορίζουμε τον ακόλουθο αλγόριθμο ΔΠ.
+\begin{itemize}
+    \item (Ορισμός υποπροβλημάτων). Ορίζουμε ως $D(:i, v)$, όπου $1 \leq i \leq n - 1$ και $v \in G.V$, το πρόβλημα εύρεσης του συντομότερου μονοπατιού από την κορυφή $v$ προς την κορυφή $s$, με το πολύ $i$ ακμές. 
+    Έστω $d_{i, v}$ η λύση του υποπροβλήματος αυτού.
+     \item (Καθορισμός επιλογών). Δεδομένου ότι είμαστε στην κορυφή $v$ έχοντας διαθέσιμες $i \geq 1$ ακμές, είτε αξιοποιούμε την τρέχουσα ακμή πηγαίνοντας σε κάποιες από τις κορυφές του συνόλου $N^-(v)$,
+     είτε δεν την αξιοποιούμε. Αν έχουν εξαντληθεί οι διαθέσιμες ακμές και βρισκόμαστε στην κορυφή $s$, έχουμε φτάσει στον προορισμό μας.
+    \item  (Ορισμός αναδρομικής σχέσης). Ακολουθεί η αναδρομική σχέση που προκύπτει από τις παραπάνω επιλογές.
+    \begin{align*}
+        d_{i, v} = 
+        \begin{cases}
+            0, & i = 0 \text{ και } v = s, \\
+            \infty, & i = 0 \text{ και } v \in G.V \setminus \{s\}, \\
+            \min  
+            \begin{cases}
+                d_{i - 1, v}, \\
+                \min_{u \in N^-(v)}\left\{d_{i - 1, u} + w(u, v)\right\}, 
+            \end{cases}
+            & 1\leq i \leq n - 1 \text{ και } v \in G.V.
+        \end{cases}
+    \end{align*}
+    \item  (Σειρά επίλυσης υποπροβλημάτων). Τα υποπροβλήματα επιλύονται κατά αύξουσα σειρά του δείκτη $i$.
+    \item (Επίλυση αρχικού προβλήματος). Οι τιμές $d_{n - 1, 1}, d_{n - 1, 2}, \dots, d_{n - 1, n}$.
+\end{itemize}
+
+\begin{yellowalgo}
+    \Function{Bellman-Ford}{$G, s$}
+        \For{\textbf{all} $v \in G.V \setminus \{s\}$}
+            \State $D[0][v] \gets \infty;$
+        \EndFor
+        \State $D[0][s] \gets 0;$
+        \For{$i \gets 1; \; i \leq n - 1; \; i++$}
+            \For{\textbf{all} $v \in G.V$}
+                \State $D[i][v] \gets D[i - 1][v];$
+                \For{\textbf{all} $u \in N^-(v)$}
+                    \State $D[i][v] \gets \min\left\{D[i][v], D[i - 1][u] + w(u, v)\right\};$
+                \EndFor
+            \EndFor
+        \EndFor
+        \State \Return $D;$
+    \EndFunction
+\end{yellowalgo}
+\noindent
+Η πολυπλοκότητα του Bellman-Ford περιγράφεται από τη συνάρτηση
+\begin{align*}
+    T(|G.V|, |G.E|) &\leq c_1 \cdot (|G.V| - 1) + c_2 \cdot (|G.V| - 1) \cdot \sum_{v \in G.V} |N^-(v)| + c_3 \\
+    &\leq c_1 \cdot |G.V| + c_2 \cdot |G.V| \cdot |G.E| + c_3 \\
+    &= c_1 \cdot n + c_2 \cdot n \cdot m + c_3 \\
+    &= \dots \\
+    &= \mathcal{O}(n \cdot m).
+\end{align*}
+\sectiontitle{Ο αλγόριθμος των Floyd-Warshall}
+\noindent Ως τελευταίο αλγόριθμο έχουμε επιλέξει να παρουσιάσουμε τον Floyd-Warshall, ο οποίος βρίσκει τα συντομότερα μονοπάτια για όλα τα ζεύγη των κορυφών ενός γραφήματος. 
+Αυτός είναι επίσης ένας αλγόριθμος Δυναμικού Προγραμματισμού και διατυπώνεται ως εξής.
+\begin{itemize}
+    \item (Ορισμός υποπροβλημάτων). Ορίζουμε ως $D(:i, v, u)$, όπου $0 \leq i \leq n$  και $v, u \in G.V$, το υποπρόβλημα εύρεσης του συντομότερου μονοπατιού που εκκινεί στην κορυφή $v$ 
+    και καταλήγει στην $u$ περνώντας από κάποιες κορυφές του συνόλου $\{1, \dots, i\}$. Ονομάζουμε $d_{i, v, u}$ τη λύση του υποπροβλήματος αυτού.
+    \item (Καθορισμός επιλογών). Κάθε επιλογή αφορά στο αν το συντομότερο μονοπάτι μεταξύ των κορυφών $v, u$ θα περιέχει την κορυφή $i$ ή όχι.
+    \item  (Ορισμός αναδρομικής σχέσης). Ακολουθεί η αναδρομική σχέση που προκύπτει από τις παραπάνω επιλογές.
+    \begin{align*}
+        d_{i, v, u} = 
+        \begin{cases}
+            0, & i = 0 \text{ και } v = u, \\
+            w(v, u), & i = 0 \text{ και } u \in G.V \setminus \{v\} \text{ και } (v, u) \in G.E, \\
+            \infty,  & i = 0 \text{ και } u \in G.V \setminus \{v\} \text{ και } (v, u) \notin G.E, \\
+            \min   
+            \begin{cases}
+                d_{i - 1, v, u}, \\
+                d_{i - 1, v, i} + d_{i - 1, i, u}, 
+            \end{cases}
+            & 1 \leq i \leq n \text{ και } v, u \in G.V.
+        \end{cases} 
+    \end{align*}
+    \item  (Σειρά επίλυσης υποπροβλημάτων). Τα υποπροβλήματα επιλύονται κατά αύξουσα σειρά του δείκτη $i$.
+    \item (Επίλυση αρχικού προβλήματος). Η τιμή $d_{n, v, u}$ για κάθε $v, u \in G.V$.
+\end{itemize}
+
+\begin{yellowalgo}
+    \Function{Floyd-Warshall}{$G$}
+        \For{\textbf{all} $v \in G.V$}
+            \State $D[0][v][v] \gets 0;$
+            \For{\textbf{all} $u \in G.V \setminus \{v\}$}
+                \If{$(v, u) \in G.E$}
+                    \State $D[0][v][u] \gets w(v, u);$
+                \Else     
+                    \State $D[0][v][u] \gets \infty;$
+                \EndIf
+            \EndFor
+        \EndFor
+        \For{$i \gets 1; \; i \leq n; \; i++$}
+            \For{\textbf{all} $v \in G.V$}
+                \For{\textbf{all} $u \in G.V$}
+                    \State $D[i][v][u] \gets \min\{D[i - 1][v][u], D[i - 1][v][i] + D[i - 1][i][u]\};$
+                \EndFor
+            \EndFor
+        \EndFor
+        \State \Return $D;$
+    \EndFunction
+\end{yellowalgo}
+\noindent
+Η πολυπλοκότητά του εκφράζεται από τη συνάρτηση 
+\begin{align*}
+    T(|G.V|, |G.E|) &= c_1 \cdot |G.V|^2 + c_2 \cdot |G.V|^3 \\
+    &= \dots \\
+    &= \mathcal{O}(n^3).
+\end{align*}
+
+% Use Greek heading for bibliography
+\renewcommand{\refname}{Βιβλιογραφία}
+\selectlanguage{greek}
+\begin{thebibliography}{99}
+
+\bibitem{dmagos}
+Δημήτριος Μάγος.
+\textit{Στοιχεία Ανάλυσης Αλγορίθμων}.
+Εκδόσεις Τσότρας, 2024.
+
+\bibitem{tsichlas}
+Τσίχλας, Κ., Γούναρης, Α., Μανωλόπουλος, Ι. (2015). \textit{Σχεδίαση και Ανάλυση Αλγορίθμων} [Προπτυχιακό εγχειρίδιο]. Κάλλιπος, Ανοικτές Ακαδημαϊκές Εκδόσεις.
+
+\bibitem{cormen2022}
+Thomas H. Cormen, Charles E. Leiserson, Ronald L. Rivest, Clifford Stein. 
+\textit{Introduction to Algorithms}. 4η Έκδοση, MIT Press, 2022.
+
+\bibitem{levitin2022}
+Anany Levitin. 
+\textit{Introduction to the Design and Analysis of Algorithms}. 4η Έκδοση, Pearson, 2022.
+\end{thebibliography}
+
+\end{document}
