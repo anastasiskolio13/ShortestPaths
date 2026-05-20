@@ -4,6 +4,8 @@
 # Except the README and the PDF
 !ShortestPaths.pdf
 !ShortestPaths.tex
+!ShortestPathsPresentation.pdf
+!ShortestPathsPresentation.tex
 
 # Keep this gitignore tracked
 !.gitignore
