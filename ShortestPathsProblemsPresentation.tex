@@ -1,0 +1,289 @@
+% !TeX program = xelatex
+\documentclass[t]{beamer}
+\usepackage{graphicx}
+\usepackage{amsthm}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{tikz,pgfplots}
+\pgfplotsset{compat=1.18}
+\usetikzlibrary{positioning, automata}
+\usepackage{hyperref}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+
+% Remove all \End commands
+\algnotext{EndIf}
+\algnotext{EndFor}
+\algnotext{EndWhile}
+\algnotext{EndLoop}
+\algnotext{EndForAll}
+\algnotext{EndRepeat}
+\algnotext{EndProcedure}
+\algnotext{EndFunction}
+\algnotext{Function}
+
+\usepackage{tcolorbox}
+\usepackage{xcolor}
+\usepackage{fontspec}
+\usepackage{libertinus}
+\usepackage[greek, english]{babel}
+\usepackage{mathtools}
+\usetikzlibrary{arrows,positioning, calc}
+\tikzstyle{vertex}=[draw,fill=white,circle,minimum size=20pt,inner sep=0pt]
+\usetikzlibrary{shapes.geometric, arrows}
+\usepackage{listings}
+
+% Beamer presentation setup
+\usetheme{Madrid}
+\usecolortheme{default}
+\setbeamertemplate{navigation symbols}{}
+
+\usetikzlibrary{shapes,decorations,decorations.pathreplacing,arrows,calc,arrows.meta,fit,positioning}
+
+\tikzset{
+	auto,node distance =1 cm and 1 cm, semithick,
+	state/.style ={ellipse, draw, minimum width = 0.7 cm},
+	point/.style = {circle, draw, inner sep=0.04cm,fill,node contents={}},
+	bidirected/.style={Latex-Latex,dashed},
+	directed/.style={-Latex},
+	el/.style = {inner sep=2pt, align=left, sloped}
+}
+
+\let\MakeUppercase\relax
+
+% Redefine Function command to omit the "Function" prefix - start only (no end)
+\algdef{S}[FUNCTION]{Function}%
+   [2]{\textproc{#1}\ifthenelse{\equal{#2}{}}{}{(#2)}}%
+
+% Redefine line number presentation
+\algrenewcommand{\alglinenumber}[1]{\ifnum#1=0\else\footnotesize #1\fi}
+
+% Define custom colors
+\definecolor{myyellow}{RGB}{255,255,150}
+
+% Define algorithmic environment inside a yellow-colored box
+\newenvironment{yellowalgo}{%
+	\begin{tcolorbox}[colback=myyellow, colframe=myyellow, boxrule=0.5pt]
+	\begin{algorithmic}[1]
+	\setcounter{ALG@line}{-1}
+}{%
+	\end{algorithmic}
+	\end{tcolorbox}
+}
+
+\setbeamercovered{transparent} 
+
+% Custom command for function names
+\newcommand{\Func}[1]{\textproc{#1}}
+
+\renewcommand{\L}{\mathcal{L}}
+\newcommand{\Create}{\textbf{Create} }
+\DeclareMathOperator{\argmax}{argmax}
+\DeclareMathOperator{\argmin}{argmin}
+\newcommand{\True}{\texttt{True}}
+\newcommand{\False}{\texttt{False}}
+
+% Redefine the theorem environment to use normal font for the body text
+\makeatletter
+\def\th@plain{%
+	\thm@notefont{}%
+	\normalfont
+}
+\makeatother
+
+\newtheorem{fig}{Figure}
+\newtheorem{obs}{Παρατήρηση}
+\newtheorem{cor}{Πόρισμα}
+
+\title{Προβλήματα στα Συντομότερα Μονοπάτια}
+\subtitle{Θεωρία Γραφημάτων και Εφαρμογές}
+\author{}
+\date{}
+
+\author[Κολιόπουλος, Βογιατζής]{Α. ~Κολιόπουλος\and Δ.~Βογιατζής}
+
+\institute[ΠΑΔΑ]{Πανεπιστήμιο Δυτικής Αττικής}
+
+\date[Θεωρία Γραφημάτων και Εφαρμογές]%{Παρουσίαση Εφαρμογών}
+
+
+\AtBeginSection[]
+{
+  \begin{frame}
+    \frametitle{Προβλήματα}
+    \tableofcontents[currentsection]
+  \end{frame}
+}
+
+\begin{document}
+
+\setcounter{framenumber}{-1}
+
+
+\begin{frame}[plain]
+\titlepage
+\vfill
+\begin{center}
+	\includegraphics[width=0.28\textwidth]{UniWA logo.png}
+\end{center}
+\end{frame}
+
+
+% \begin{frame}
+% \frametitle{Προβλήματα}
+% \tableofcontents
+% \end{frame}
+
+\section{Σημαντικοί Δρόμοι - $28$ος ΠΔΠ Καμπ (seniors)}
+
+\begin{frame}
+    \frametitle{Σημαντικοί Δρόμοι - $28$ος ΠΔΠ Καμπ (seniors)}
+    \underline{Είσοδος:}
+	\pause
+	\vspace{0.25cm} 
+	\begin{itemize}
+		\item Κατευθυνόμενο γράφημα $G = \left(V.E\right) : \forall e \in G.E, \; w(e) \in \mathbb{N}_{+}$. 
+	\end{itemize}
+	\pause
+	\vspace{0.25cm}
+	\underline{Ιδιότητες:}
+	\pause
+	\vspace{0.25cm}
+	\begin{itemize}
+		\item Η κορυφή με τον αριθμό $1$ αποτελεί την αφετηρία.
+		\pause
+		\item Οποιαδήποτε άλλη κορυφή είναι προσπελάσιμη από την αφετηρία. \label{prop2}
+		\pause
+		\item \emph{Σημαντική} είναι κάθε ακμή που η μείωση του βάρους της κατά $1$, επιφέρει αντίστοιχη μείωση στην απόσταση της αφετηρίας προς κάποια άλλη κορυφή.
+		\pause
+		\item \emph{Πολύ σημαντική} είναι κάθε ακμή που η αύξηση του βάρους της κατά $1$, επιφέρει αντίστοιχη αύξηση στην απόσταση της αφετηρίας προς κάποια άλλη κορυφή.
+	\end{itemize}
+\end{frame}
+
+\begin{frame}
+	\frametitle{Σημαντικοί Δρόμοι - $28$ος ΠΔΠ Καμπ (seniors)}
+	\underline{Έξοδος:}
+	\pause
+	\vspace{0.25cm} 
+	\begin{itemize}
+		\item $\#$Σημαντικών ακμών.
+		\pause 
+		\item $\#$Πολύ σημαντικών ακμών.
+	\end{itemize}
+	\pause
+	\vspace{0.25cm} 
+	\underline{Λύση:}
+	\pause
+	\vspace{0.25cm} 
+	\begin{itemize}
+		\item Εκτελούμε τον αλγόριθμο του Dijkstra και παράγουμε το ΚΑΓ συντομότερων μονοπατιών, έστω $\hat{G}$.
+		\pause
+		\item Προσθέτουμε κάθε ακμή του $\hat{G}$ στο σύνολο των σημαντικών ακμών, ονομαστικά $I$.
+		\pause
+		\item Προσθέτουμε κάθε ακμή $(u, v) \in \hat{G}$, για την οποία ισχύει ότι $|\hat{G}.N^-(v) = 1|$, στο σύνολο των πολύ σημαντικών ακμών, έστω $I'$.
+		\pause
+		\item Εκτυπώνουμε τα μεγέθη των $I$, $I'$.
+	\end{itemize}
+\end{frame}
+
+
+% \begin{frame}
+% 	\frametitle{Σημαντικοί Δρόμοι - $28$ος ΠΔΠ Καμπ (seniors)}
+	
+% 	\begin{yellowalgo}
+% 		\Function{Critical}{$G$}
+%     		\For{\textbf{all} $v \in G.V \setminus \{1\}$}
+%         		\State $D[v] \gets \infty;$
+%     		\EndFor
+%     		\State $D[1] \gets 0; \; S \gets \emptyset;$
+%     		\While{$S \neq G.V$} 
+%         		\State $v \gets {\arg\min}\left\{D[u] : u \in G.V \setminus S\right\}; \; S \gets S \cup \{v\};$
+%        			\For{\textbf{all} $u \in G.N^+(v) \setminus S$}
+%             		\If{$D[v] + w(v, u) < D[u]$}
+%                 		\State $D[u] \gets D[v] + w(v, u); \; \hat{G}.N^-(u) \gets \{v\};$
+% 					\ElsIf{$D[v] + w(v, u) = D[u]$}
+% 						\State $\hat{G}.N^-(u) \gets \hat{G}.N^-(u) \cup \{v\};$
+%             		\EndIf
+%         		\EndFor
+%     		\EndWhile
+% 			\For{$v \in G.V$}
+% 			\EndFor
+% 		\EndFunction
+% 	\end{yellowalgo}
+	
+% \end{frame}
+
+\begin{frame}
+	\frametitle{Σημαντικοί Δρόμοι - $28$ος ΠΔΠ Καμπ (seniors)}
+	\underline{Ορθότητα:}
+	\pause
+	\begin{block}{Σημαντικές ακμές}
+		Οι σημαντικές ακμές είναι αυτές του ΚΑΓ που παράγει ο Dijkstra. Ισοδύναμα, $I = \hat{G}.E$.
+	\end{block}
+	\pause
+	\begin{block}{\emph{Απόδειξη.}}
+		Έστω ότι $I \neq \hat{G}.E$. Διακρίνουμε τις εξής δύο περιπτώσεις. 
+		\pause
+		\\
+		\vspace{0.25cm} 
+		(Πρώτη περίπτωση). Έστω ότι υπάρχει ακμή $(v, u) \in G.E$, εκτός ΚΑΓ, η οποία είναι σημαντική. 
+		Γνωρίζουμε σίγουρα ότι $u \neq 1$, αφού $d(1) = 0$ και $w(e) \geq 1$, για κάθε $e \in G.E$.
+		Δεδομένου ότι κάθε κορυφή είναι προσπελάσιμη από την αφετηρία (Ιδιότητα \ref{prop2}), έπεται ότι υπάρχει 
+		συντομότερο μονοπάτι από την κορυφή $1$ στη $u$. Έστω $v^*$ η τελευταία κορυφή σε ένα από τα συντομότερα μονοπάτια 
+		που καταλήγουν στην $u$.
+	\end{block}
+\end{frame}
+
+\begin{frame}
+	\frametitle{Σημαντικοί Δρόμοι - $28$ος ΠΔΠ Καμπ (seniors)}
+	\begin{block}{\emph{Απόδειξη. (συνέχεια)}}
+		 Έχουμε ότι 
+		 \pause
+		\begin{align*}
+			d(v) + w(v, u) > d(v^*) + w(v^*, u) &\Rightarrow d(v) + w(v, u) - 1 \geq d(v^*) + w(v^*, u) \\ %=d(u) \\
+			&\Rightarrow d(v) + w(v, u) - 1 \geq d(u).
+		\end{align*}
+		\pause
+		Επομένως δεν υπάρχει ακμή εκτός του $\hat{G}$, η οποία είναι σημαντική.
+		\pause
+		\\
+		\vspace{0.25cm} 
+		(Δεύτερη περίπτωση). Έστω ότι υπάρχει ακμή $(v, u) \in \hat{G}.E$, που δεν είναι σημαντική. %Δεδομένου ότι η ίδια ανήκει στο $\hat{G}.E$, γνωρίζουμε 
+		%ότι υπάρχει σε τουλάχιστον ένα συντομότερο μονοπάτι από 
+	\end{block}
+\end{frame}
+
+% \begin{frame}
+% \begin{center}
+% \scalebox{1.5}{
+% \begin{tikzpicture}
+%     \node[state] (1) at (0,0) {$1$};
+%     \node[state] (2) at (1.5, -2) {$2$};
+%     \node[state] (3) at (-1.5, -2) {$3$}; %[below=of 2] {$3$}
+%     % \draw[directed] (1) to[bend left = 20] node[above] {$3$}(2);
+%     % \draw[directed] (2) to[bend left = 20] node[below] {$5$}(1);
+%     % \draw[directed] (1) -- node[left, xshift=-2pt] {$7$} (3);
+%     % \draw[directed] (2) -- node[right, xshift=2pt] {$1$} (3);
+% \end{tikzpicture}
+% }
+% \end{center}
+% \end{frame}
+
+\section{Σύστημα πλοήγησης}
+
+\end{document}
+
+
+
+
+	% \begin{yellowalgo}
+	% 	\Function{Critical}{$G$}
+	% 		\State $\hat{G} \gets \Func{Dijkstra}(G, 1);$
+	% 		\State $I \gets \hat{G}.E;$ %\Comment{Σημαντικοί δρόμοι.}
+	% 		\State $I' \gets \left\{(u, v) \in \hat{G}.E : \left|N^-(v)\right| = 1\right\}$ %\Comment{Πολύ σημαντικοί δρόμοι.}
+
+	% 		\State \textbf{print} $|I|, \left|I'\right|$ 
+	% 	\EndFunction
+	% \end{yellowalgo}
+
+% \underline{Αλγόριθμος:}

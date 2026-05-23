@@ -6,6 +6,8 @@
 !ShortestPaths.tex
 !ShortestPathsPresentation.pdf
 !ShortestPathsPresentation.tex
+!ShortestPathsProblemsPresentation.pdf
+!ShortestPathsProblemsPresentation.tex
 
 # Keep this gitignore tracked
 !.gitignore
