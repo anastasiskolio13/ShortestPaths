@@ -142,7 +142,7 @@
 	\pause
 	\vspace{0.25cm} 
 	\begin{itemize}
-		\item Κατευθυνόμενο γράφημα $G = \left(V.E\right) : \forall e \in G.E, \; w(e) \in \mathbb{N}_{+}$. 
+		\item Κατευθυνόμενο γράφημα $G = \left(V.E\right) : \forall e \in G.E, \; w(e) \in \mathbb{N}_{+}$, όπου $n = G.V$ και $m = G.E$. 
 	\end{itemize}
 	\pause
 	\vspace{0.25cm}
@@ -180,38 +180,11 @@
 		\pause
 		\item Προσθέτουμε κάθε ακμή του $\hat{G}$ στο σύνολο των σημαντικών ακμών, ονομαστικά $I$.
 		\pause
-		\item Προσθέτουμε κάθε ακμή $(u, v) \in \hat{G}$, για την οποία ισχύει ότι $|\hat{G}.N^-(v) = 1|$, στο σύνολο των πολύ σημαντικών ακμών, έστω $I'$.
+		\item Προσθέτουμε κάθε ακμή $(v, u) \in \hat{G}$, για την οποία ισχύει ότι $\left|\hat{G}.N^-(u) = 1\right|$, στο σύνολο των πολύ σημαντικών ακμών, έστω $I'$.
 		\pause
 		\item Εκτυπώνουμε τα μεγέθη των $I$, $I'$.
 	\end{itemize}
 \end{frame}
-
-
-% \begin{frame}
-% 	\frametitle{Σημαντικοί Δρόμοι - $28$ος ΠΔΠ Καμπ (seniors)}
-	
-% 	\begin{yellowalgo}
-% 		\Function{Critical}{$G$}
-%     		\For{\textbf{all} $v \in G.V \setminus \{1\}$}
-%         		\State $D[v] \gets \infty;$
-%     		\EndFor
-%     		\State $D[1] \gets 0; \; S \gets \emptyset;$
-%     		\While{$S \neq G.V$} 
-%         		\State $v \gets {\arg\min}\left\{D[u] : u \in G.V \setminus S\right\}; \; S \gets S \cup \{v\};$
-%        			\For{\textbf{all} $u \in G.N^+(v) \setminus S$}
-%             		\If{$D[v] + w(v, u) < D[u]$}
-%                 		\State $D[u] \gets D[v] + w(v, u); \; \hat{G}.N^-(u) \gets \{v\};$
-% 					\ElsIf{$D[v] + w(v, u) = D[u]$}
-% 						\State $\hat{G}.N^-(u) \gets \hat{G}.N^-(u) \cup \{v\};$
-%             		\EndIf
-%         		\EndFor
-%     		\EndWhile
-% 			\For{$v \in G.V$}
-% 			\EndFor
-% 		\EndFunction
-% 	\end{yellowalgo}
-	
-% \end{frame}
 
 \begin{frame}
 	\frametitle{Σημαντικοί Δρόμοι - $28$ος ΠΔΠ Καμπ (seniors)}
@@ -248,42 +221,115 @@
 		\pause
 		\\
 		\vspace{0.25cm} 
-		(Δεύτερη περίπτωση). Έστω ότι υπάρχει ακμή $(v, u) \in \hat{G}.E$, που δεν είναι σημαντική. %Δεδομένου ότι η ίδια ανήκει στο $\hat{G}.E$, γνωρίζουμε 
-		%ότι υπάρχει σε τουλάχιστον ένα συντομότερο μονοπάτι από 
+		(Δεύτερη περίπτωση). Έστω ότι υπάρχει ακμή $(v, u) \in \hat{G}.E$, που δεν είναι σημαντική. Η μείωση του βάρους αυτής της ακμής κατά $1$, επιφέρει
+		μείωση του βάρους συντομότερου μονοπατιού από την αφετηριακή κορυφή στη $u$ (άτοπο). 
+		\pause
+		\\
+		\vspace{0.25cm} 
+		Ο συνδυασμός των ανωτέρω περιπτώσεων μας δίνει ότι $I  = \hat{G}.E$.
+		\begin{flushright}
+			$\blacksquare$
+		\end{flushright}
 	\end{block}
 \end{frame}
 
-% \begin{frame}
-% \begin{center}
-% \scalebox{1.5}{
-% \begin{tikzpicture}
-%     \node[state] (1) at (0,0) {$1$};
-%     \node[state] (2) at (1.5, -2) {$2$};
-%     \node[state] (3) at (-1.5, -2) {$3$}; %[below=of 2] {$3$}
-%     % \draw[directed] (1) to[bend left = 20] node[above] {$3$}(2);
-%     % \draw[directed] (2) to[bend left = 20] node[below] {$5$}(1);
-%     % \draw[directed] (1) -- node[left, xshift=-2pt] {$7$} (3);
-%     % \draw[directed] (2) -- node[right, xshift=2pt] {$1$} (3);
-% \end{tikzpicture}
-% }
-% \end{center}
-% \end{frame}
+\begin{frame}
+	\frametitle{Σημαντικοί Δρόμοι - $28$ος ΠΔΠ Καμπ (seniors)}
+	\begin{block}{Πολύ σημαντικές ακμές}
+		Το σύνολο των πολύ σημαντικών ακμών απαρτίζεται από κάθε ακμή $(v, u) \in \hat{G}.E$, για την οποία ισχύει ότι το $\hat{G}.N^-(u)$ είναι μονοσύνολο.
+		Ισοδύναμα, 
+		\begin{align}
+			I' = \left\{(v, u) \in \hat{G}.E : \left|\hat{G}.N^-(u)\right| = 1\right\}.	
+			\label{veryimportant}
+		\end{align}
+	\end{block}	
+	\pause
+	\begin{block}{\emph{Απόδειξη.}}
+		Έστω ότι δεν ισχύει η σχέση (\ref{veryimportant}). Έχουμε τις ακόλουθες περιπτώσεις.
+		\pause
+		\\
+		\vspace{0.25cm}
+		(Πρώτη περίπτωση). Έστω ότι υπάρχει ακμή $(v, u) \in G.E \setminus \hat{G}.E$, που είναι πολύ σημαντική. Με τρόπο ανάλογο με την πρώτη περίπτωση της προηγούμενης απόδειξης, 
+		παίρνουμε ότι $d(v) + w(v, u) + 1 > d(u).$
+	\end{block}
+\end{frame}
 
-\section{Σύστημα πλοήγησης}
+\begin{frame}
+	\frametitle{Σημαντικοί Δρόμοι - $28$ος ΠΔΠ Καμπ (seniors)}
+	\begin{block}{\emph{Απόδειξη. (συνέχεια)}}
+		(Δεύτερη περίπτωση). Έστω ότι υπάρχει πολύ σημαντική ακμή $(v, u) \in \hat{G}.E$, τέτοια ώστε $\hat{G}.N^-(u) > 1$. Η αύξηση του βάρους της ακμής αυτής 
+		κατά μία μονάδα, δε φέρει αύξηση στο μήκος του συντομότερου μονοπατιού. Αυτό προκύπτει λόγω της υπόθεσης, αφού υπάρχει τουλάχιστον άλλη μία ακμή
+		στο $\hat{G}$ που προσπίπτει στη $u$. Επομένως, μπορούμε να χρησιμοποιήσουμε εκείνη την ακμή για να διατηρήσουμε το μήκος των συντομότερων μονοπατιών
+		που περιέχουν την $u$.
+		\pause
+		\\
+		\vspace{0.25cm}
+		Προσέξτε ότι εκτός της αφετηρίας, δεν υπάρχει κορυφή $u \in \hat{G}.V$ με μηδενικό βαθμό και άρα δεν χρειάζεται να ελέγξουμε την περίπτωση $\hat{G}.N^-(u) < 1$ για κανένα $u$.
+		\pause
+		\\
+		\vspace{0.25cm}
+		(Τρίτη περίπτωση). Έστω ότι υπάρχει ακμή $(v, u) \in \hat{G}.E$, τέτοια ώστε το $\hat{G}.N^-(u)$ να είναι μονοσύνολο και η ίδια να μην είναι πολύ σημαντική. 
+	\end{block}
+\end{frame}
+
+\begin{frame}
+	\frametitle{Σημαντικοί Δρόμοι - $28$ος ΠΔΠ Καμπ (seniors)}
+	\begin{block}{\emph{Απόδειξη. (συνέχεια)}}
+		Δεδομένου ότι η ίδια αποτελεί τον μοναδικό τρόπο να φτάσουμε στην κορυφή $u$ διανύοντας την ελάχιστη απόσταση, η αύξηση του μήκους της θα φέρει αύξηση και στην απόσταση αυτή. 
+		\pause
+		\\
+		\vspace{0.25cm}
+		Συνδυάζοντας τις παραπάνω περιπτώσεις παίρνουμε το ζητούμενο. 
+		\begin{flushright}
+			$\blacksquare$
+		\end{flushright}
+	\end{block}
+	\pause
+	\begin{block}{Χρονική πολυπλοκότητα}
+		\begin{itemize}
+			\item $\mathcal{O}(n \lg n + m \lg n)$ - \emph{Δυαδικός σωρός}. 
+			\item $\mathcal{O}(n \lg n + m)$ - \emph{Σωρός Fibonacci}.
+		\end{itemize}
+	\end{block}
+	\pause
+	\vspace{0.25cm}
+	\begin{center}
+		\fbox{\href{https://github.com/anastasiskolio13/GRCPC-2025/blob/main/E.cpp}{\textbf{Ενδεικτική κωδικοποίηση}}}
+	\end{center}
+\end{frame}
+
+
+
+\section{Shortcut - USACO $2019$}
+
+\begin{frame}
+	\frametitle{Shortcut - USACO $2019$}
+	\underline{Είσοδος:}
+	\pause
+	\vspace{0.25cm} 
+	\begin{itemize}
+		\item Μη κατευθυνόμενο γράφημα $G = \left(V.E\right) : \forall e \in G.E, \; w(e) \in \mathbb{N}_{+}$, όπου $n = G.V$ και $m = G.E$. 
+		\pause
+		\item $C = \langle c_1, c_2, \dots, c_n\rangle : c_i \in \mathbb{N}, \forall i \in [n]$. 
+		\pause
+		\item $t \in \mathbb{N}_+$.
+	\end{itemize}
+	\pause
+	\vspace{0.25cm} 
+	\underline{Έξοδος:}
+	\pause	
+	\begin{align*}
+		\min_{v \in \{2, \dots, n\}}\left\{\left(\sum_{u \in G.V} d_u \cdot c_u - \left(\sum_{u \in G.V \setminus G.V_v} d_u \cdot c_u + \sum_{u \in G.V_v} (d_u - d_v + t) \cdot c_u \right)\right)^+ \right\},	
+	\end{align*}
+	όπου 
+	\begin{align*}
+		V_v = \left\{u \in G.V : \text{συντομότερο μονοπάτι προς } u \text{ περνά από v}\right\}.
+	\end{align*}
+\end{frame}
 
 \end{document}
 
 
 
 
-	% \begin{yellowalgo}
-	% 	\Function{Critical}{$G$}
-	% 		\State $\hat{G} \gets \Func{Dijkstra}(G, 1);$
-	% 		\State $I \gets \hat{G}.E;$ %\Comment{Σημαντικοί δρόμοι.}
-	% 		\State $I' \gets \left\{(u, v) \in \hat{G}.E : \left|N^-(v)\right| = 1\right\}$ %\Comment{Πολύ σημαντικοί δρόμοι.}
 
-	% 		\State \textbf{print} $|I|, \left|I'\right|$ 
-	% 	\EndFunction
-	% \end{yellowalgo}
-
-% \underline{Αλγόριθμος:}

@@ -8,6 +8,8 @@
 !ShortestPathsPresentation.tex
 !ShortestPathsProblemsPresentation.pdf
 !ShortestPathsProblemsPresentation.tex
+!Critical.cpp
+!Shortcut.cpp
 
 # Keep this gitignore tracked
 !.gitignore
