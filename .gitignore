@@ -8,10 +8,13 @@
 !ShortestPathsPresentation.tex
 !ShortestPathsProblemsPresentation.pdf
 !ShortestPathsProblemsPresentation.tex
+!CriticalStatement.pdf
 !Critical.cpp
 !TheTouristGuide.cpp
 !TheTouristGuide_BS.cpp
 !TheTouristGuide_DSU.cpp
+!TheTouristGuideStatement.pdf
+
 
 # Keep this gitignore tracked
 !.gitignore

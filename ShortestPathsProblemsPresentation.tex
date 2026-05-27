@@ -377,7 +377,7 @@
 				\max
 				\begin{cases}
 					dp[i - 1][v], \\
-					\displaystyle\max_{u \in N(v)}\left\{\min\{w(v, u), dp[i - 1][u]\} \right\}, 					
+					\max_{u \in N(v)}\left\{\min\{w(v, u), dp[i - 1][u]\} \right\}, 					
 				\end{cases}
 				& i \geq 1 \land v \in G.V. 
 			\end{cases}
@@ -403,6 +403,13 @@
 			\item $\mathcal{O}(nm)$ - Σχεδόν ίδια διαδικασία με τον Bellman Ford.			
 		\end{itemize}
 	\end{block}
+	\pause
+	\vspace{0.25cm}
+	\begin{center}
+		\fbox{\href{https://github.com/anastasiskolio13/ShortestPaths/blob/master/TheTouristGuide.cpp}{\textbf{Ενδεικτική κωδικοποίηση}}}
+	\end{center}
+	
+	% \underline{Καλύτερες λύσεις:}
 \end{frame}
 
 \end{document}
