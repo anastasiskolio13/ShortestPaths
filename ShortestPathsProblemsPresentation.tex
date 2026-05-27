@@ -294,42 +294,170 @@
 	\pause
 	\vspace{0.25cm}
 	\begin{center}
-		\fbox{\href{https://github.com/anastasiskolio13/GRCPC-2025/blob/main/E.cpp}{\textbf{Ενδεικτική κωδικοποίηση}}}
+		\fbox{\href{https://github.com/anastasiskolio13/ShortestPaths/blob/master/Critical.cpp}{\textbf{Ενδεικτική κωδικοποίηση}}}
 	\end{center}
 \end{frame}
 
-
-
-\section{Shortcut - USACO $2019$}
+\section{The Tourist Guide - UVa}
 
 \begin{frame}
-	\frametitle{Shortcut - USACO $2019$}
+	\frametitle{The Tourist Guide - UVa}
 	\underline{Είσοδος:}
 	\pause
 	\vspace{0.25cm} 
 	\begin{itemize}
-		\item Μη κατευθυνόμενο γράφημα $G = \left(V.E\right) : \forall e \in G.E, \; w(e) \in \mathbb{N}_{+}$, όπου $n = G.V$ και $m = G.E$. 
+		\item Μη κατευθυνόμενο γράφημα $G = \left(V.E\right) : \forall e \in G.E, \; w(e) \in \mathbb{N}_{\geq 2}$, όπου $n = G.V$ και $m = G.E$. 
 		\pause
-		\item $C = \langle c_1, c_2, \dots, c_n\rangle : c_i \in \mathbb{N}, \forall i \in [n]$. 
+		\item Αφετηριακή κορυφή $s \in [n]$.
 		\pause
-		\item $t \in \mathbb{N}_+$.
+		\item Τελική κορυφή $d \in [n]$.
+		\item $t \in \mathbb{N}$.
 	\end{itemize}
 	\pause
 	\vspace{0.25cm} 
 	\underline{Έξοδος:}
-	\pause	
-	\begin{align*}
-		\min_{v \in \{2, \dots, n\}}\left\{\left(\sum_{u \in G.V} d_u \cdot c_u - \left(\sum_{u \in G.V \setminus G.V_v} d_u \cdot c_u + \sum_{u \in G.V_v} (d_u - d_v + t) \cdot c_u \right)\right)^+ \right\},	
-	\end{align*}
-	όπου 
-	\begin{align*}
-		V_v = \left\{u \in G.V : \text{συντομότερο μονοπάτι προς } u \text{ περνά από v}\right\}.
-	\end{align*}
+	\pause
+	\vspace{0.25cm} 
+	\begin{itemize}
+		\item Έστω \(P = \langle v_1, v_2, \dots, v_k \rangle\) μια διαδρομή από την \(s\) στη \(d\), τέτοια ώστε η ελάχιστη ακμή της να είναι μέγιστη μεταξύ όλων των $s - d$ διαδρομών. Η ζητούμενη τιμή 
+		είναι ίση με 
+		\begin{align*}
+			\left\lceil\frac{t}{\min_{e \in P}\left\{w(e)\right\} - 1}\right\rceil.
+		\end{align*}
+	\end{itemize}
+\end{frame}
+
+\begin{frame}
+	\frametitle{The Tourist Guide - UVa}
+	\begin{block}{Παρατήρηση}
+		Υπάρχει βέλτιστη λύση στην οποία η $P$ είναι άκυκλη.
+	\end{block}
+	\begin{block}{\emph{Απόδειξη.}}
+		Έστω ότι η $P$ περιέχει κύκλο, ονομαστικά $P_{ij}$. Παράγουμε μία νέα διαδρομή, στην οποία έχουμε αφαιρέσει τον κύκλο. Η ίδια είναι ίση με 
+		\begin{align*}
+			P' = \langle v_1, v_2, \dots, v_i, v_{j + 1}, \dots, v_k \rangle.
+		\end{align*}
+		Έστω $C, C'$ η bottleneck τιμή της $P$ και της $P'$, αντίστοιχα. Σε περίπτωση που ο κύκλος της $P$ περιέχει ακμή μικρότερου βάρους από αυτές εκτός του κύκλου,
+		η bottleneck τιμή μικραίνει. Άρα, αφαιρώντας τον κύκλο από τη διαδρομή, η bottleneck τιμή είτε θα μεγαλώσει είτε θα παραμείνει ίδια.  Σε κάθε περίπτωση έχουμε $C \leq C'$. 
+		\begin{flushright}
+			$\blacksquare$
+		\end{flushright}
+	\end{block}
+\end{frame}
+
+\begin{frame}
+	\frametitle{The Tourist Guide - UVa}
+	\begin{block}{Πόρισμα}
+		Υπάρχει βέλτιστη διαδρομή που αποτελείται από $n - 1$ ακμές το πολύ.
+	\end{block}
+	\pause
+	\vspace{0.25cm}
+	\underline{Λύση:}
+	\pause
+	\\
+	\vspace{0.25cm}
+	Αξιοποιώντας το παραπάνω πόρισμα, θα χρησιμοποιήσουμε Δυναμικό Προγραμματισμό.
+	\begin{itemize}
+		\item (Ορισμός πίνακα ΔΠ). Ορίζουμε ως $dp[i][v]$, όπου $0 \leq i \leq n - 1$ και $v \in G.V$,
+		το μέγιστο ελάχιστο βάρος ακμής που μπορεί να προκύψει, εκκινώτας από την κορυφή $v$ και καταλήγοντας 
+		στην κορυφή $d$, χρησιμοποιώντας το πολύ $i$ ακμές.
+		\pause
+		\item (Καθορισμός επιλογών). 
+		\end{itemize}
+\end{frame}
+
+\begin{frame}
+	\frametitle{The Tourist Guide - UVa}
+	\begin{itemize}
+		\item (Αναδρομική σχέση). Προκύπτει η εξής αναδρομική σχέση.
+		\begin{align*}
+			dp[i][v] = \begin{cases}
+				\infty, & i = 0 \land v = d, \\
+				-\infty, & i = 0 \land v \neq d, \\
+				\max
+				\begin{cases}
+					dp[i - 1][v], \\
+					\displaystyle\max_{u \in N(v)}\left\{\min\{w(v, u), dp[i - 1][u]\} \right\}, 					
+				\end{cases}
+				& i \geq 1 \land v \in G.V. 
+			\end{cases}
+		\end{align*}
+		\pause
+		\item (Σειρά υπολογισμού). Οι τιμές υπολογίζονται κατά αύξουσα σειρά του δείκτη $i$.
+		\pause
+		\item (Επίλυση αρχικού προβλήματος). Δεδομένου ότι 
+		\begin{align*}
+			dp[n - 1][s] = \min_{e \in P}\left\{w(e)\right\},	
+		\end{align*}
+		η ζητούμενη τιμή ισούται με 
+		\begin{align*}
+			\left\lceil\frac{t}{dp[n - 1][s] - 1}\right\rceil.
+		\end{align*}
+	\end{itemize}
+\end{frame}
+
+\begin{frame}
+	\frametitle{The Tourist Guide - UVa}
+	\begin{block}{Χρονική πολυπλοκότητα}
+		\begin{itemize}
+			\item $\mathcal{O}(nm)$ - Σχεδόν ίδια διαδικασία με τον Bellman Ford.			
+		\end{itemize}
+	\end{block}
 \end{frame}
 
 \end{document}
 
 
+
+
+		% \begin{align*}
+		% 	C' = \min\left\{\min_{1 \leq k \leq i - 1}\left\{w(v_i, v_{i + 1})\right\}\right\}
+		% \end{align*}
+
+
+
+
+
+
+% \section{Shortcut - USACO $2019$}
+
+% \begin{frame}
+% 	\frametitle{Shortcut - USACO $2019$}
+% 	\underline{Είσοδος:}
+% 	\pause
+% 	\vspace{0.25cm} 
+% 	\begin{itemize}
+% 		\item Μη κατευθυνόμενο γράφημα $G = \left(V.E\right) : \forall e \in G.E, \; w(e) \in \mathbb{N}_{+}$, όπου $n = G.V$ και $m = G.E$. 
+% 		\pause
+% 		\item $C = \langle c_1, c_2, \dots, c_n\rangle : c_i \in \mathbb{N}, \forall i \in [n]$. 
+% 		\pause
+% 		\item $t \in \mathbb{N}_+$.
+% 	\end{itemize}
+% 	\pause
+% 	\vspace{0.25cm}
+% 	\underline{Ιδιότητες:}
+% 	\pause
+% 	\vspace{0.25cm}
+% 	\begin{itemize}
+% 		\item Η κορυφή $1$ αποτελεί την αφετηρία.
+% 		\pause
+% 		\item Το γράφημα είναι συνεκτικό.
+% 		\pause
+% 		\item Το κόστος της κορυφής $v \in G.V$ είναι ίσο με $d_v \cdot c_v$, όπου $d_v$ η απόσταση της $v$ από την αφετηρία.
+% 	\end{itemize}
+% \end{frame}
+
+% \begin{frame}
+% 	\frametitle{Shortcut - USACO $2019$}
+% 	\underline{Έξοδος:}
+% 	\begin{align*}
+% 		\min_{v \in \{2, \dots, n\}}\left\{\left(\sum_{u \in G.V} d_u \cdot c_u - \sum_{u \in G.V \setminus S_v} d_u \cdot c_u - \sum_{u \in S_v} (d_u - d_v + t) \cdot c_u \right)^+ \right\},	
+% 	\end{align*}
+% 	όπου 
+% 	\begin{align*}
+% 		S_v = \left\{u \in G.V : \text{συντομότερο μονοπάτι προς } u \text{ περνά από v}\right\}.
+% 	\end{align*}
+% \end{frame}
 
 
 
