@@ -311,6 +311,7 @@
 		\item Αφετηριακή κορυφή $s \in [n]$.
 		\pause
 		\item Τελική κορυφή $d \in [n]$.
+		\pause
 		\item $t \in \mathbb{N}$.
 	\end{itemize}
 	\pause
@@ -332,6 +333,7 @@
 	\begin{block}{Παρατήρηση}
 		Υπάρχει βέλτιστη λύση στην οποία η $P$ είναι άκυκλη.
 	\end{block}
+	\pause
 	\begin{block}{\emph{Απόδειξη.}}
 		Έστω ότι η $P$ περιέχει κύκλο, ονομαστικά $P_{ij}$. Παράγουμε μία νέα διαδρομή, στην οποία έχουμε αφαιρέσει τον κύκλο. Η ίδια είναι ίση με 
 		\begin{align*}
@@ -350,6 +352,10 @@
 	\begin{block}{Πόρισμα}
 		Υπάρχει βέλτιστη διαδρομή που αποτελείται από $n - 1$ ακμές το πολύ.
 	\end{block}
+	\pause 
+	\begin{block}{\emph{Απόδειξη.}}
+		Προκύπτει άμεσα από την τελευταία παρατήρηση.
+	\end{block}
 	\pause
 	\vspace{0.25cm}
 	\underline{Λύση:}
@@ -357,6 +363,7 @@
 	\\
 	\vspace{0.25cm}
 	Αξιοποιώντας το παραπάνω πόρισμα, θα χρησιμοποιήσουμε Δυναμικό Προγραμματισμό.
+	\pause
 	\begin{itemize}
 		\item (Ορισμός πίνακα ΔΠ). Ορίζουμε ως $dp[i][v]$, όπου $0 \leq i \leq n - 1$ και $v \in G.V$,
 		το μέγιστο ελάχιστο βάρος ακμής που μπορεί να προκύψει, εκκινώτας από την κορυφή $v$ και καταλήγοντας 
@@ -377,7 +384,7 @@
 				\max
 				\begin{cases}
 					dp[i - 1][v], \\
-					\max_{u \in N(v)}\left\{\min\{w(v, u), dp[i - 1][u]\} \right\}, 					
+					\displaystyle\max_{u \in N(v)}\left\{\min\{w(v, u), dp[i - 1][u]\} \right\}, 					
 				\end{cases}
 				& i \geq 1 \land v \in G.V. 
 			\end{cases}
@@ -412,21 +419,180 @@
 	% \underline{Καλύτερες λύσεις:}
 \end{frame}
 
+\section{Traveller  - COI 2023 Round B}
+
+\begin{frame}
+	\frametitle{Traveller  - COI $2023$ Round B}
+	\underline{Είσοδος:}
+	\pause
+	\vspace{0.25cm} 
+	\begin{itemize}
+		\item Απλό μη κατευθυνόμενο γράφημα $G = (V, E) : \forall e \in G.E, w(e) \in 2\mathbb{N}_+$, όπου $n = G.V$ και $m = G.E$.
+		\pause
+		\item $k \in \mathbb{N}_+$.
+	\end{itemize}
+	\pause
+	\underline{Ιδιότητες:}
+	\pause
+	\vspace{0.25cm}
+	\begin{itemize}
+		\item Υπάρχει τουλάχιστον ένα μονοπάτι από την κορυφή $1$ στη $n$.
+	\end{itemize}
+	\pause
+	\vspace{0.25cm} 
+	\underline{Έξοδος:}
+	\pause
+	\vspace{0.25cm} 
+	\begin{itemize}
+		\item Μία διαδρομή $P = \langle v_1, v_2, \dots, v_{\ell}\rangle$ από την κορυφή $1$ στη $n$ με το ελάχιστο δυνατό κόστος. Το κόστος μίας διαδρομής $P$ ορίζεται ως 
+		\begin{align*}
+			C(P) =
+			\begin{cases}
+				\sum_{i = 1}^{\ell - 1} w(v_i, v_{i + 1}), & \ell \leq k, \\
+				\frac{1}{2} \sum_{i = 1}^{\ell - 1} w(v_i, v_{i + 1}), & \ell > k.
+			\end{cases}
+		\end{align*}
+	\end{itemize}
+\end{frame}
+
+\begin{frame}
+	\frametitle{Traveller  - COI 2023 Round B}
+	\underline{Υποπρόβλημα $1$:}
+	\pause
+	\vspace{0.25cm} 
+	\begin{itemize}
+		\item $n \leq 300$.
+		\pause
+		\item $m = n - 1$.
+		\pause
+		\item $k = 1$.
+		\pause
+		\item $w(e) = w(e'), \forall e, e' \in G.E$. 
+	\end{itemize}
+	\pause
+	\vspace{0.25cm} 
+	\underline{Λύση:}
+	\pause
+	\\
+	\vspace{0.25cm} 
+	Ο δεύτερος περιορισμός συνεπάγεται ότι το $G$ είναι δέντρο. Μπορούμε λοιπόν να
+	«ριζώσουμε» το δέντρο στην κορυφή $1$, να υπολογίσουμε το μήκος του μονοπατιού $1 - n$, και δεδομένου ότι όλες οι ακμές έχουν το ίδιο βάρος $w^*$ (Περιορισμός 4), πολλαπλασιάζουμε 
+	το μήκος του μονοπατιού με το $w^*$. Γνωρίζοντας επίσης ότι $k = 1$, διαιρούμε την προηγούμενη ποσότητα με το $2$. Αυτή είναι και η τελική απάντηση.
+	\pause
+	\\
+	\vspace{0.25cm} 
+	Η παραπάνω διαδικασία επιτυγχάνεται με μία διερεύνηση κατά βάθος, η οποία είναι τάξης $\mathcal{O}(n)$, αφού $m \in \mathcal{O}(n)$.
+\end{frame}
+
+\begin{frame}
+	\frametitle{Traveller  - COI 2023 Round B}
+	\underline{Υποπρόβλημα $2$:}
+	\pause
+	\vspace{0.25cm} 
+	\begin{itemize}
+		\item $n \leq 10^5$.
+		\pause
+		\item $m \leq 10^5$.
+		\pause
+		\item $k = 1$.
+		\pause
+		\item $w(e) = w(e'), \forall e, e' \in G.E$. 
+	\end{itemize}
+	\pause
+	\vspace{0.25cm} 
+	\underline{Λύση:}
+	\pause
+	\\
+	\vspace{0.25cm} 
+	Στο υποπρόβλημα αυτό το γράφημα παύει να αποτελεί δέντρο και επίσης τα $n, m$ έχουν μεγαλώσει σημαντικά. Παρ'όλα αυτά οι ακμές συνεχίζουν να έχουν ίδια βάρη και έτσι για να ελαχιστοποιήσουμε 
+	το κόστος της διαδρομής πρέπει να ελαχιστοποιήσουμε τον αριθμό ακμών που διανύουμε. 
+	\pause
+	\\
+	\vspace{0.25cm} 
+	Αυτό μπορούμε να το πετύχουμε με μία διερεύνηση κατά πλάτος, η οποία είναι τάξης $\mathcal{O}(n + m)$. 
+\end{frame}
+
+\begin{frame}
+	\frametitle{Traveller - COI 2023 Round B}
+	\underline{Υποπρόβλημα $3$:}
+	\pause
+	\vspace{0.25cm} 
+	\begin{itemize}
+		\item $n \leq 10^5$.
+		\pause
+		\item $m \leq 10^5$.
+		\pause
+		\item $k = 1$.
+	\end{itemize}
+	\pause
+	\vspace{0.25cm} 
+	\underline{Λύση:}
+	\pause
+	\\
+	\vspace{0.25cm} 
+	Στο υποπρόβλημα αυτό παύει το βάρος όλων των ακμών να είναι κοινό. Στη συγκεκριμένη περίπτωση έχουμε το κλασσικό πρόβλημα συντομότερου μονοπατιού.
+	\pause
+	\\
+	\vspace{0.25cm} 
+	Επομένως, εκτελούμε τον αλγόριθμο του Dijsktra και διαιρούμε το αποτέλεσμα με το $2$ δεδομένου ότι συνεχίζει να ισχύει η έκπτωση. Η πολυπλοκότητα με τη χρήση σωρού Fibonacci φράζεται από τα πάνω από την 
+	κλάση $\Theta(n \lg n + m)$.
+\end{frame}
+
+\begin{frame}
+	\frametitle{Traveller - COI 2023 Round B}
+	\underline{Υποπρόβλημα $4$:}
+	\pause
+	\vspace{0.25cm} 
+	\begin{itemize}
+		\item $n \leq 1000$.
+		\pause
+		\item $m \leq 1000$.
+		\pause
+		\item $k \leq 1000$.
+	\end{itemize}
+	\pause
+	\vspace{0.25cm} 
+	\underline{Λύση:}
+	Το παρόν αποτελεί το μόνο υποπρόβλημα στο οποίο η έκπτωση δεν είναι πάντα σε ισχύ. Συνεπώς, έχουμε 
+	δύο περιπτώσεις: είτε θα χρησιμοποιήσουμε την έκπτωση είτε όχι. Η απάντηση είναι το ελάχιστο κόστος μεταξύ των δύο 
+	περιπτώσεων. Κάνουμε την εξής παρατήρηση.
+	\begin{block}{Παρατήρηση}
+		Σε περίπτωση που χρησιμοποιήσουμε την έκπτωση, η βέλτιστη διαδρομή θα περιέχει τουλάχιστον $k$ και το πολύ 
+		$k + n - 1$ ακμές. Ισοδύναμα, $k + 1 \leq \ell \leq k + n$,
+		όπου $\ell$ ο αριθμός των κορυφών που εμπεριέχεται στη διαδρομή.
+	\end{block}
+\end{frame}
+
+\begin{frame}
+	\frametitle{Traveller - COI 2023 Round B}
+	\begin{block}{\emph{Απόδειξη.}}
+		Έστω ότι η υπάρχει βέλτιστη διαδρομή, στην οποία το $\ell$ δεν συμφωνεί με την τελευταία ανισότητα. Διακρίνουμε δύο περιπτώσεις.
+		\pause
+		\\
+		\vspace{0.25cm} 		 
+		($\ell \leq k$). Στην περίπτωση που η διαδρομή περιέχει το πολύ $k$ κορυφές, συνεπάγεται άμεσα ότι η ίδια περιέχει το πολύ $k - 1$ ακμές, οπότε η έκπτωση δεν ισχύει (άτοπο). 
+		\pause
+		\\
+		\vspace{0.25cm} 	
+		($\ell \geq k + n + 1$). Έστω 
+		\begin{align*}
+			P = \langle v_1, v_2, \dots, v_k, v_{k + 1}, \dots, v_{k + n}, v_{k + n + 1}, \dots, v_\ell \rangle
+		\end{align*}
+		μία βέλτιστη διαδρομή. %Δεδομένου ότι υπάρχουν τουλάχιστον $n$ ακμές στην υποακολουθία $\langle v_{k + 1}, \dots, v_{\ell} \rangle$, γνωρίζουμε σίγουρα ότι 
+		%υπάρχει κύκλος, ονομαστικά $C$, στις θέσεις $i, \dots, j$ της $P$, όπου $k + 1 \leq i < j \leq \ell$. «Κόβωντας» τον $C$ από την $P$ παίρνουμε μία λύση με μικρότερο κόστος
+		%από τη βέλτιστη, αφού $w(e) \geq 2$ (άτοπο). $\blacksquare$
+	\end{block}
+\end{frame}
+
 \end{document}
 
-
-
-
-		% \begin{align*}
-		% 	C' = \min\left\{\min_{1 \leq k \leq i - 1}\left\{w(v_i, v_{i + 1})\right\}\right\}
-		% \end{align*}
-
-
-
-
-
+% \begin{align*}
+% 	C' = \min\left\{\min_{1 \leq k \leq i - 1}\left\{w(v_i, v_{i + 1})\right\}\right\}
+% \end{align*}
 
 % \section{Shortcut - USACO $2019$}
+
+% $P = \langle v_1, v_2, \dots, v_{\ell} = n \rangle$
 
 % \begin{frame}
 % 	\frametitle{Shortcut - USACO $2019$}

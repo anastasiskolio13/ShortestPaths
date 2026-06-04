@@ -6,15 +6,20 @@
 !ShortestPaths.tex
 !ShortestPathsPresentation.pdf
 !ShortestPathsPresentation.tex
-!ShortestPathsProblemsPresentation.pdf
-!ShortestPathsProblemsPresentation.tex
+#!ShortestPathsProblemsPresentation.pdf
+#!ShortestPathsProblemsPresentation.tex
 !CriticalStatement.pdf
 !Critical.cpp
 !TheTouristGuide.cpp
 !TheTouristGuide_BS.cpp
-!TheTouristGuide_DSU.cpp
-!TheTouristGuideStatement.pdf
-
+#!TheTouristGuide_DSU.cpp
+#!TheTouristGuideStatement.pdf
+#!CountryRoads.cpp
+#!Journey.cpp
+#!NotEscaping.cpp
+!Traveller.cpp
+!TravellerStatement.pdf
+#!Traveller_Dijkstra.cpp
 
 # Keep this gitignore tracked
 !.gitignore
