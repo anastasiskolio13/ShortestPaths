@@ -556,6 +556,7 @@
 	Το παρόν αποτελεί το μόνο υποπρόβλημα στο οποίο η έκπτωση δεν είναι πάντα σε ισχύ. Συνεπώς, έχουμε 
 	δύο περιπτώσεις: είτε θα χρησιμοποιήσουμε την έκπτωση είτε όχι. Η απάντηση είναι το ελάχιστο κόστος μεταξύ των δύο 
 	περιπτώσεων. Κάνουμε την εξής παρατήρηση.
+	\pause
 	\begin{block}{Παρατήρηση}
 		Σε περίπτωση που χρησιμοποιήσουμε την έκπτωση, η βέλτιστη διαδρομή θα περιέχει τουλάχιστον $k$ και το πολύ 
 		$k + n - 1$ ακμές. Ισοδύναμα, $k + 1 \leq \ell \leq k + n$,
@@ -574,17 +575,125 @@
 		\pause
 		\\
 		\vspace{0.25cm} 	
-		($\ell \geq k + n + 1$). Έστω 
+		($\ell \geq k + n + 1$). Έστω $P$ μία βέλτιστη διαδρομή. Δεδομένου ότι η υποακολουθία $\langle v_{k + 1}, \dots, v_{\ell} \rangle$ αποτελείται από τουλάχιστον $n$ κορυφές, 
+		έπεται ότι υπάρχει κύκλος, ο οποίος 
+		εκκινεί στη θέση $i$ και ολοκληρώνεται στη $j$, όπου $k + 1 \leq i < j \leq \ell$. Η διαδρομή έχει λοιπόν τη μορφή
 		\begin{align*}
-			P = \langle v_1, v_2, \dots, v_k, v_{k + 1}, \dots, v_{k + n}, v_{k + n + 1}, \dots, v_\ell \rangle
+			P = \langle v_1, v_2, \dots, v_k, v_{k + 1}, \dots, v_i, \dots, v_j, v_{j + 1}, \dots, v_\ell \rangle.
 		\end{align*}
-		μία βέλτιστη διαδρομή. %Δεδομένου ότι υπάρχουν τουλάχιστον $n$ ακμές στην υποακολουθία $\langle v_{k + 1}, \dots, v_{\ell} \rangle$, γνωρίζουμε σίγουρα ότι 
-		%υπάρχει κύκλος, ονομαστικά $C$, στις θέσεις $i, \dots, j$ της $P$, όπου $k + 1 \leq i < j \leq \ell$. «Κόβωντας» τον $C$ από την $P$ παίρνουμε μία λύση με μικρότερο κόστος
-		%από τη βέλτιστη, αφού $w(e) \geq 2$ (άτοπο). $\blacksquare$
 	\end{block}
 \end{frame}
 
+\begin{frame}
+	\frametitle{Traveller - COI 2023 Round B}
+	\begin{block}{\emph{Απόδειξη. (συνέχεια)}}
+		Παράγουμε μία καινούργια διαδρομή βασισμένη στην $P$, στην οποία έχουμε «κόψει» τον προαναφερθέντα κύκλο. Η καινούργια διαδρομή είναι ίση με
+		\begin{align*}
+			P' = \langle v_1, v_2, \dots, v_k, v_{k + 1}, \dots, v_i, v_{j + 1}, \dots, v_\ell \rangle.
+		\end{align*}
+		\pause	
+		Έχουμε ότι 
+		\begin{align*}
+			C(P) &= \sum_{r = 1}^{\ell - 1} w(v_r, v_{r + 1}) \\
+			&= \sum_{r = 1}^{i - 1}  w(v_r, v_{r + 1}) + \sum_{r = i}^{j} w(v_r, v_{r + 1}) + \sum_{r = j + 1}^{\ell - 1} w(v_r, v_{r + 1})
+		\end{align*}
+		και επίσης
+	\end{block}
+\end{frame}
+
+\begin{frame}
+	\frametitle{Traveller - COI 2023 Round B}
+	\begin{block}{\emph{Απόδειξη. (συνέχεια)}}
+		\begin{align*}
+			C(P') = \sum_{r = 1}^{i - 1}  w(v_r, v_{r + 1}) + w(v_i, v_{j + 1}) + \sum_{r = j + 1}^{\ell - 1} w(v_r, v_{r + 1}).
+		\end{align*}
+		\pause	
+		Αφαιρώντας τα δύο κόστη παίρνουμε 
+		\begin{align*}
+			C(P') - C(P) &= w(v_i, v_{j + 1}) - \sum_{r = i}^{j} w(v_r, v_{r + 1}) \\
+			&= w(v_i, v_{j + 1}) - \sum_{r = i}^{j - 1} w(v_r, v_{r + 1}) - w(v_j, v_{j + 1}) \\
+			&= w(v_i, v_{j + 1}) - \sum_{r = i}^{j - 1} w(v_r, v_{r + 1}) - w(v_i, v_{j + 1}) & (v_i = v_j)
+		\end{align*}
+	\end{block}
+\end{frame}
+
+\begin{frame}
+	\frametitle{Traveller - COI 2023 Round B}
+	\begin{block}{\emph{Απόδειξη. (συνέχεια)}}
+		\begin{align*}
+			 &= -\sum_{r = i}^{j - 1} w(v_r, v_{r + 1}) < 0,
+		\end{align*}
+		αφού $w(e) \geq 2$. 
+		\pause
+		\\
+		\vspace{0.25cm} 	
+		Συνεπώς, έχουμε παράξει μία λύση με μικρότερο κόστος από τη βέλτιστη (άτοπο). 
+		\pause
+		\\
+		\vspace{0.25cm} 
+		Ο συνδυασμός των παραπάνω περιπτώσεων ολοκληρώνει την απόδειξη.
+		\begin{flushright}
+			$\blacksquare$
+		\end{flushright}
+	\end{block}
+\end{frame}
+
+\begin{frame}
+	\frametitle{Traveller - COI 2023 Round B}
+	Με βάση την ανωτέρω παρατήρηση ορίζουμε τον ακόλουθο αλγόριθμο ΔΠ.
+	\pause
+	\begin{itemize}
+		\item (Ορισμός πίνακα ΔΠ). Ορίζουμε ως $dp[i][v]$, όπου $0 \leq i \leq k + n - 1$ και $v \in G.V$,
+		το ελάχιστο κόστος για να μεταβούμε από την κορυφή $v$ στην κορυφή $1$ χρησιμοποιώντας ακριβώς $i$ ακμές.
+		\pause
+		\item (Καθορισμός επιλογών). Από μία κορυφή $v$ μπορούμε να μεταβούμε σε οποιοδήποτε κορυφή $u \in N(v)$ μειώνοντας κατά μία τις διαθέσιμες ακμές
+		και προσθέτοντας στο συνολικό κόστος την τιμή $w(v, u)$. Αν $i = 0$ και βρισκόμαστε στην κορυφή $1$ το κόστος
+		είναι μηδενικό, διαφορετικά είναι άπειρο. 
+		\pause 
+		\item (Αναδρομική σχέση). Ακολουθεί η αναδρομική σχέση που προκύπτει από τις επιλογές.
+		\begin{align*}
+			dp[i][v] =
+			\begin{cases}
+				0, & i = 0 \land v = 1, \\
+				\infty, & i = 0 \land v \neq 1, \\
+				\min_{u \in N(v)}\left\{dp[i - 1][u] + w(v, u) \right\}, & 1 \leq k + n - 1 \land v \in G.V. 
+			\end{cases}
+		\end{align*}
+		\end{itemize}
+\end{frame}
+
+\begin{frame}
+	\frametitle{Traveller - COI 2023 Round B}
+	\begin{itemize}
+		\item (Σειρά υπολογισμού). Οι τιμές υπολογίζονται κατά αύξουσα σειρά του δείκτη $i$.
+		\pause
+		\item (Λύση αρχικού προβλήματος). Η λύση είναι το
+		\begin{align*}
+			\min
+			\begin{cases}
+				\displaystyle\min_{1 \leq i \leq n - 1}\{dp[i][n]\}, \\
+				\displaystyle\min_{k \leq i \leq k + n - 1}\left\{dp[i][n]\right\} \cdot \frac{1}{2}.
+			\end{cases}
+		\end{align*}
+	\end{itemize}
+	\pause
+	\begin{block}{Χρονική πολυπλοκότητα}
+		\begin{itemize}
+			\item $\mathcal{O}(km + kn)$.			
+		\end{itemize}
+	\end{block}
+	\pause
+	\vspace{0.25cm}
+	\begin{center}
+		\fbox{\href{https://github.com/anastasiskolio13/ShortestPaths/blob/master/TheTouristGuide.cpp}{\textbf{Ενδεικτική κωδικοποίηση}}}
+	\end{center}
+\end{frame}
+
 \end{document}
+
+		%Δεδομένου ότι υπάρχουν τουλάχιστον $n$ ακμές στην υποακολουθία $\langle v_{k + 1}, \dots, v_{\ell} \rangle$, γνωρίζουμε σίγουρα ότι 
+		%υπάρχει κύκλος, ονομαστικά $C$, στις θέσεις $i, \dots, j$ της $P$, όπου $k + 1 \leq i < j \leq \ell$. «Κόβωντας» τον $C$ από την $P$ παίρνουμε μία λύση με μικρότερο κόστος
+		%από τη βέλτιστη, αφού $w(e) \geq 2$ (άτοπο). $\blacksquare$
 
 % \begin{align*}
 % 	C' = \min\left\{\min_{1 \leq k \leq i - 1}\left\{w(v_i, v_{i + 1})\right\}\right\}
