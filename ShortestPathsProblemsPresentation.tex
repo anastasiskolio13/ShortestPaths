@@ -310,132 +310,132 @@
 	\end{center}
 \end{frame}
 
-\section{The Tourist Guide - UVa}
+% \section{The Tourist Guide - UVa}
 
-\begin{frame}
-	\frametitle{The Tourist Guide - UVa}
-	\underline{Είσοδος:}
-	\pause
-	\vspace{0.25cm} 
-	\begin{itemize}
-		\item Μη κατευθυνόμενο γράφημα $G = \left(V.E\right) : \forall e \in G.E, \; w(e) \in \mathbb{N}_{\geq 2}$, όπου $n = G.V$ και $m = G.E$. 
-		\pause
-		\item Αφετηριακή κορυφή $s \in [n]$.
-		\pause
-		\item Τελική κορυφή $d \in [n]$.
-		\pause
-		\item $t \in \mathbb{N}$.
-	\end{itemize}
-	\pause
-	\vspace{0.25cm} 
-	\underline{Έξοδος:}
-	\pause
-	\vspace{0.25cm} 
-	\begin{itemize}
-		\item Έστω \(P = \langle v_1, v_2, \dots, v_k \rangle\) μια διαδρομή από την \(s\) στη \(d\), τέτοια ώστε η ελάχιστη ακμή της να είναι μέγιστη μεταξύ όλων των $s - d$ διαδρομών. Η ζητούμενη τιμή 
-		είναι ίση με 
-		\begin{align*}
-			\left\lceil\frac{t}{\min_{e \in P}\left\{w(e)\right\} - 1}\right\rceil.
-		\end{align*}
-	\end{itemize}
-\end{frame}
+% \begin{frame}
+% 	\frametitle{The Tourist Guide - UVa}
+% 	\underline{Είσοδος:}
+% 	\pause
+% 	\vspace{0.25cm} 
+% 	\begin{itemize}
+% 		\item Μη κατευθυνόμενο γράφημα $G = \left(V.E\right) : \forall e \in G.E, \; w(e) \in \mathbb{N}_{\geq 2}$, όπου $n = G.V$ και $m = G.E$. 
+% 		\pause
+% 		\item Αφετηριακή κορυφή $s \in [n]$.
+% 		\pause
+% 		\item Τελική κορυφή $d \in [n]$.
+% 		\pause
+% 		\item $t \in \mathbb{N}$.
+% 	\end{itemize}
+% 	\pause
+% 	\vspace{0.25cm} 
+% 	\underline{Έξοδος:}
+% 	\pause
+% 	\vspace{0.25cm} 
+% 	\begin{itemize}
+% 		\item Έστω \(P = \langle v_1, v_2, \dots, v_k \rangle\) μια διαδρομή από την \(s\) στη \(d\), τέτοια ώστε η ελάχιστη ακμή της να είναι μέγιστη μεταξύ όλων των $s - d$ διαδρομών. Η ζητούμενη τιμή 
+% 		είναι ίση με 
+% 		\begin{align*}
+% 			\left\lceil\frac{t}{\min_{e \in P}\left\{w(e)\right\} - 1}\right\rceil.
+% 		\end{align*}
+% 	\end{itemize}
+% \end{frame}
 
-\begin{frame}
-	\frametitle{The Tourist Guide - UVa}
-	\begin{block}{Παρατήρηση}
-		Υπάρχει βέλτιστη λύση στην οποία η $P$ είναι άκυκλη.
-	\end{block}
-	\pause
-	\begin{block}{\emph{Απόδειξη.}}
-		Έστω ότι η $P$ περιέχει κύκλο, ονομαστικά $P_{ij}$. Παράγουμε μία νέα διαδρομή, στην οποία έχουμε αφαιρέσει τον κύκλο. Η ίδια είναι ίση με 
-		\begin{align*}
-			P' = \langle v_1, v_2, \dots, v_i, v_{j + 1}, \dots, v_k \rangle.
-		\end{align*}
-		Έστω $C, C'$ η bottleneck τιμή της $P$ και της $P'$, αντίστοιχα. Σε περίπτωση που ο κύκλος της $P$ περιέχει ακμή μικρότερου βάρους από αυτές εκτός του κύκλου,
-		η bottleneck τιμή μικραίνει. Άρα, αφαιρώντας τον κύκλο από τη διαδρομή, η bottleneck τιμή είτε θα μεγαλώσει είτε θα παραμείνει ίδια.  Σε κάθε περίπτωση έχουμε $C \leq C'$. 
-		\begin{flushright}
-			$\blacksquare$
-		\end{flushright}
-	\end{block}
-\end{frame}
+% \begin{frame}
+% 	\frametitle{The Tourist Guide - UVa}
+% 	\begin{block}{Παρατήρηση}
+% 		Υπάρχει βέλτιστη λύση στην οποία η $P$ είναι άκυκλη.
+% 	\end{block}
+% 	\pause
+% 	\begin{block}{\emph{Απόδειξη.}}
+% 		Έστω ότι η $P$ περιέχει κύκλο, ονομαστικά $P_{ij}$. Παράγουμε μία νέα διαδρομή, στην οποία έχουμε αφαιρέσει τον κύκλο. Η ίδια είναι ίση με 
+% 		\begin{align*}
+% 			P' = \langle v_1, v_2, \dots, v_i, v_{j + 1}, \dots, v_k \rangle.
+% 		\end{align*}
+% 		Έστω $C, C'$ η bottleneck τιμή της $P$ και της $P'$, αντίστοιχα. Σε περίπτωση που ο κύκλος της $P$ περιέχει ακμή μικρότερου βάρους από αυτές εκτός του κύκλου,
+% 		η bottleneck τιμή μικραίνει. Άρα, αφαιρώντας τον κύκλο από τη διαδρομή, η bottleneck τιμή είτε θα μεγαλώσει είτε θα παραμείνει ίδια.  Σε κάθε περίπτωση έχουμε $C \leq C'$. 
+% 		\begin{flushright}
+% 			$\blacksquare$
+% 		\end{flushright}
+% 	\end{block}
+% \end{frame}
 
-\begin{frame}
-	\frametitle{The Tourist Guide - UVa}
-	\begin{block}{Πόρισμα}
-		Υπάρχει βέλτιστη διαδρομή που αποτελείται από $n - 1$ ακμές το πολύ.
-	\end{block}
-	\pause 
-	\begin{block}{\emph{Απόδειξη.}}
-		Προκύπτει άμεσα από την τελευταία παρατήρηση.
-	\end{block}
-	\pause
-	\vspace{0.25cm}
-	\underline{Λύση:}
-	\pause
-	\\
-	\vspace{0.25cm}
-	Αξιοποιώντας το παραπάνω πόρισμα, θα χρησιμοποιήσουμε Δυναμικό Προγραμματισμό.
-	\pause
-	\begin{itemize}
-		\item (Ορισμός πίνακα ΔΠ). Ορίζουμε ως $dp[i][v]$, όπου $0 \leq i \leq n - 1$ και $v \in G.V$,
-		το μέγιστο ελάχιστο βάρος ακμής που μπορεί να προκύψει, εκκινώτας από την κορυφή $v$ και καταλήγοντας 
-		στην κορυφή $d$, χρησιμοποιώντας το πολύ $i$ ακμές.
-		\end{itemize}
-\end{frame}
+% \begin{frame}
+% 	\frametitle{The Tourist Guide - UVa}
+% 	\begin{block}{Πόρισμα}
+% 		Υπάρχει βέλτιστη διαδρομή που αποτελείται από $n - 1$ ακμές το πολύ.
+% 	\end{block}
+% 	\pause 
+% 	\begin{block}{\emph{Απόδειξη.}}
+% 		Προκύπτει άμεσα από την τελευταία παρατήρηση.
+% 	\end{block}
+% 	\pause
+% 	\vspace{0.25cm}
+% 	\underline{Λύση:}
+% 	\pause
+% 	\\
+% 	\vspace{0.25cm}
+% 	Αξιοποιώντας το παραπάνω πόρισμα, θα χρησιμοποιήσουμε Δυναμικό Προγραμματισμό.
+% 	\pause
+% 	\begin{itemize}
+% 		\item (Ορισμός πίνακα ΔΠ). Ορίζουμε ως $dp[i][v]$, όπου $0 \leq i \leq n - 1$ και $v \in G.V$,
+% 		το μέγιστο ελάχιστο βάρος ακμής που μπορεί να προκύψει, εκκινώτας από την κορυφή $v$ και καταλήγοντας 
+% 		στην κορυφή $d$, χρησιμοποιώντας το πολύ $i$ ακμές.
+% 		\end{itemize}
+% \end{frame}
 
-\begin{frame}
-	\frametitle{The Tourist Guide - UVa}
-	\begin{itemize}
-		\item (Καθορισμός επιλογών). Δεδομένου ότι βρισκόμαστε στην κορυφή $v$ έχοντας διαθέσιμες $i$ ακμές, είτε
-		θα χρησιμοποιήσουμε μία ακμή για να μεταβούμε σε μία από τις γειτονικές κορυφές είτε θα μειώσουμε κατά μία τις 
-		διαθέσιμες ακμές παραμένοντας στην ίδια κορυφή. Αν ο αριθμός των διαθέσιμων ακμών είναι μηδενικός και βρισκόμαστε
-		στην τελική κορυφή, το κόστος είναι το ουδέτερο στοιχείο στοιχείο της συνάρτησης ελαχίστου, διαφορετικά ποινικοποιούμε 
-		το κόστος αναθέτοντας στο ίδιο $-\infty.$
-		\pause
-		\item (Αναδρομική σχέση). Προκύπτει η εξής αναδρομική σχέση.
-		\begin{align*}
-			dp[i][v] = \begin{cases}
-				\infty, & i = 0 \land v = d, \\
-				-\infty, & i = 0 \land v \neq d, \\
-				\max
-				\begin{cases}
-					dp[i - 1][v], \\
-					\displaystyle\max_{u \in N(v)}\left\{\min\{w(v, u), dp[i - 1][u]\} \right\}, 					
-				\end{cases}
-				& i \geq 1 \land v \in G.V. 
-			\end{cases}
-		\end{align*}
-	\end{itemize}
-\end{frame}
+% \begin{frame}
+% 	\frametitle{The Tourist Guide - UVa}
+% 	\begin{itemize}
+% 		\item (Καθορισμός επιλογών). Δεδομένου ότι βρισκόμαστε στην κορυφή $v$ έχοντας διαθέσιμες $i$ ακμές, είτε
+% 		θα χρησιμοποιήσουμε μία ακμή για να μεταβούμε σε μία από τις γειτονικές κορυφές είτε θα μειώσουμε κατά μία τις 
+% 		διαθέσιμες ακμές παραμένοντας στην ίδια κορυφή. Αν ο αριθμός των διαθέσιμων ακμών είναι μηδενικός και βρισκόμαστε
+% 		στην τελική κορυφή, το κόστος είναι το ουδέτερο στοιχείο στοιχείο της συνάρτησης ελαχίστου, διαφορετικά ποινικοποιούμε 
+% 		το κόστος αναθέτοντας στο ίδιο $-\infty.$
+% 		\pause
+% 		\item (Αναδρομική σχέση). Προκύπτει η εξής αναδρομική σχέση.
+% 		\begin{align*}
+% 			dp[i][v] = \begin{cases}
+% 				\infty, & i = 0 \land v = d, \\
+% 				-\infty, & i = 0 \land v \neq d, \\
+% 				\max
+% 				\begin{cases}
+% 					dp[i - 1][v], \\
+% 					\displaystyle\max_{u \in N(v)}\left\{\min\{w(v, u), dp[i - 1][u]\} \right\}, 					
+% 				\end{cases}
+% 				& i \geq 1 \land v \in G.V. 
+% 			\end{cases}
+% 		\end{align*}
+% 	\end{itemize}
+% \end{frame}
 
-\begin{frame}
-	\frametitle{The Tourist Guide - UVa}
-	\begin{itemize}
-		\item (Σειρά υπολογισμού). Οι τιμές υπολογίζονται κατά αύξουσα σειρά του δείκτη $i$.
-		\pause
-		\item (Επίλυση αρχικού προβλήματος). Δεδομένου ότι 
-		\begin{align*}
-			dp[n - 1][s] = \min_{e \in P}\left\{w(e)\right\},	
-		\end{align*}
-		η ζητούμενη τιμή ισούται με 
-		\begin{align*}
-			\left\lceil\frac{t}{dp[n - 1][s] - 1}\right\rceil.
-		\end{align*}
-	\end{itemize}
-	\pause
-	\begin{block}{Χρονική πολυπλοκότητα}
-		\begin{itemize}
-			\item $\mathcal{O}(nm)$ - Σχεδόν ίδια διαδικασία με τον Bellman Ford.			
-		\end{itemize}
-	\end{block}
-	\pause
-	\vspace{0.25cm}
-	\begin{center}
-		\fbox{\href{https://github.com/anastasiskolio13/ShortestPaths/blob/master/TheTouristGuide.cpp}{\textbf{Ενδεικτική κωδικοποίηση}}}
-	\end{center}
+% \begin{frame}
+% 	\frametitle{The Tourist Guide - UVa}
+% 	\begin{itemize}
+% 		\item (Σειρά υπολογισμού). Οι τιμές υπολογίζονται κατά αύξουσα σειρά του δείκτη $i$.
+% 		\pause
+% 		\item (Επίλυση αρχικού προβλήματος). Δεδομένου ότι 
+% 		\begin{align*}
+% 			dp[n - 1][s] = \min_{e \in P}\left\{w(e)\right\},	
+% 		\end{align*}
+% 		η ζητούμενη τιμή ισούται με 
+% 		\begin{align*}
+% 			\left\lceil\frac{t}{dp[n - 1][s] - 1}\right\rceil.
+% 		\end{align*}
+% 	\end{itemize}
+% 	\pause
+% 	\begin{block}{Χρονική πολυπλοκότητα}
+% 		\begin{itemize}
+% 			\item $\mathcal{O}(nm)$ - Σχεδόν ίδια διαδικασία με τον Bellman Ford.			
+% 		\end{itemize}
+% 	\end{block}
+% 	\pause
+% 	\vspace{0.25cm}
+% 	\begin{center}
+% 		\fbox{\href{https://github.com/anastasiskolio13/ShortestPaths/blob/master/TheTouristGuide.cpp}{\textbf{Ενδεικτική κωδικοποίηση}}}
+% 	\end{center}
 	
-	% \underline{Καλύτερες λύσεις:}
-\end{frame}
+% 	% \underline{Καλύτερες λύσεις:}
+% \end{frame}
 
 \section{Traveller  - COI 2023 Round B}
 
