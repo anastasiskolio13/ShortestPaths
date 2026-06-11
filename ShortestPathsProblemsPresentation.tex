@@ -10,6 +10,7 @@
 \usepackage{hyperref}
 \usepackage{algorithm}
 \usepackage{algpseudocode}
+\usepackage{etoolbox}
 
 % Remove all \End commands
 \algnotext{EndIf}
@@ -25,8 +26,9 @@
 \usepackage{tcolorbox}
 \usepackage{xcolor}
 \usepackage{fontspec}
+\usepackage{ragged2e}
 \usepackage{libertinus}
-\usepackage[greek, english]{babel}
+\usepackage[main=greek, english]{babel}
 \usepackage{mathtools}
 \usetikzlibrary{arrows,positioning, calc}
 \tikzstyle{vertex}=[draw,fill=white,circle,minimum size=20pt,inner sep=0pt]
@@ -37,6 +39,14 @@
 \usetheme{Madrid}
 \usecolortheme{default}
 \setbeamertemplate{navigation symbols}{}
+\let\raggedright\justifying
+\setlength{\emergencystretch}{2em}
+\AtBeginEnvironment{frame}{\justifying}
+\AtBeginEnvironment{block}{\justifying}
+\AtBeginEnvironment{exampleblock}{\justifying}
+\AtBeginEnvironment{alertblock}{\justifying}
+\AtBeginEnvironment{itemize}{\justifying}
+\AtBeginEnvironment{enumerate}{\justifying}
 
 \usetikzlibrary{shapes,decorations,decorations.pathreplacing,arrows,calc,arrows.meta,fit,positioning}
 
@@ -129,10 +139,10 @@
 \end{frame}
 
 
-% \begin{frame}
-% \frametitle{Προβλήματα}
-% \tableofcontents
-% \end{frame}
+\begin{frame}
+\frametitle{Προβλήματα}
+\tableofcontents
+\end{frame}
 
 \section{Σημαντικοί Δρόμοι - $28$ος ΠΔΠ Καμπ (seniors)}
 
@@ -180,7 +190,7 @@
 		\pause
 		\item Προσθέτουμε κάθε ακμή του $\hat{G}$ στο σύνολο των σημαντικών ακμών, ονομαστικά $I$.
 		\pause
-		\item Προσθέτουμε κάθε ακμή $(v, u) \in \hat{G}$, για την οποία ισχύει ότι $\left|\hat{G}.N^-(u) = 1\right|$, στο σύνολο των πολύ σημαντικών ακμών, έστω $I'$.
+		\item Προσθέτουμε κάθε ακμή $(v, u) \in \hat{G}$, για την οποία ισχύει ότι $\left|\hat{G}.N^-(u)\right| = 1$, στο σύνολο των πολύ σημαντικών ακμών, έστω $I'$.
 		\pause
 		\item Εκτυπώνουμε τα μεγέθη των $I$, $I'$.
 	\end{itemize}
@@ -238,14 +248,16 @@
 	\begin{block}{Πολύ σημαντικές ακμές}
 		Το σύνολο των πολύ σημαντικών ακμών απαρτίζεται από κάθε ακμή $(v, u) \in \hat{G}.E$, για την οποία ισχύει ότι το $\hat{G}.N^-(u)$ είναι μονοσύνολο.
 		Ισοδύναμα, 
-		\begin{align}
+		\begin{align*}
 			I' = \left\{(v, u) \in \hat{G}.E : \left|\hat{G}.N^-(u)\right| = 1\right\}.	
-			\label{veryimportant}
-		\end{align}
+			%\label{veryimportant}
+		\end{align*}
 	\end{block}	
 	\pause
 	\begin{block}{\emph{Απόδειξη.}}
-		Έστω ότι δεν ισχύει η σχέση (\ref{veryimportant}). Έχουμε τις ακόλουθες περιπτώσεις.
+		Έστω ότι δεν ισχύει η παραπάνω σχέση. 
+		%(\ref{veryimportant}). 
+		Έχουμε τις εξής περιπτώσεις.
 		\pause
 		\\
 		\vspace{0.25cm}
@@ -257,14 +269,14 @@
 \begin{frame}
 	\frametitle{Σημαντικοί Δρόμοι - $28$ος ΠΔΠ Καμπ (seniors)}
 	\begin{block}{\emph{Απόδειξη. (συνέχεια)}}
-		(Δεύτερη περίπτωση). Έστω ότι υπάρχει πολύ σημαντική ακμή $(v, u) \in \hat{G}.E$, τέτοια ώστε $\hat{G}.N^-(u) > 1$. Η αύξηση του βάρους της ακμής αυτής 
+		(Δεύτερη περίπτωση). Έστω ότι υπάρχει πολύ σημαντική ακμή $(v, u) \in \hat{G}.E$, τέτοια ώστε $\left|\hat{G}.N^-(u)\right| > 1$. Η αύξηση του βάρους της ακμής αυτής 
 		κατά μία μονάδα, δε φέρει αύξηση στο μήκος του συντομότερου μονοπατιού. Αυτό προκύπτει λόγω της υπόθεσης, αφού υπάρχει τουλάχιστον άλλη μία ακμή
 		στο $\hat{G}$ που προσπίπτει στη $u$. Επομένως, μπορούμε να χρησιμοποιήσουμε εκείνη την ακμή για να διατηρήσουμε το μήκος των συντομότερων μονοπατιών
 		που περιέχουν την $u$.
 		\pause
 		\\
 		\vspace{0.25cm}
-		Προσέξτε ότι εκτός της αφετηρίας, δεν υπάρχει κορυφή $u \in \hat{G}.V$ με μηδενικό βαθμό και άρα δεν χρειάζεται να ελέγξουμε την περίπτωση $\hat{G}.N^-(u) < 1$ για κανένα $u$.
+		Προσέξτε ότι εκτός της αφετηρίας, δεν υπάρχει κορυφή $u \in \hat{G}.V$ με μηδενικό βαθμό και άρα δεν χρειάζεται να ελέγξουμε την περίπτωση $\left|\hat{G}.N^-(u)\right| < 1$ για κανένα $u$.
 		\pause
 		\\
 		\vspace{0.25cm}
