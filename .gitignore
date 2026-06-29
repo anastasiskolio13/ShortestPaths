@@ -20,6 +20,8 @@
 !Traveller.cpp
 !TravellerStatement.pdf
 !TwoCurrencies.cpp
+!NewRoadStatement.pdf
+!NewRoad.cpp
 #!Traveller_Dijkstra.cpp
 
 # Keep this gitignore tracked
