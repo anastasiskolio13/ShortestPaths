@@ -19,6 +19,7 @@
 #!NotEscaping.cpp
 !Traveller.cpp
 !TravellerStatement.pdf
+!TwoCurrencies.cpp
 #!Traveller_Dijkstra.cpp
 
 # Keep this gitignore tracked

@@ -11,6 +11,11 @@
 \usepackage{algorithm}
 \usepackage{algpseudocode}
 \usepackage{etoolbox}
+%\usepackage{microtype}
+%\usepackage[document]{ragged2e}
+\usepackage{ragged2e}
+\justifying
+
 
 % Remove all \End commands
 \algnotext{EndIf}
@@ -22,6 +27,8 @@
 \algnotext{EndProcedure}
 \algnotext{EndFunction}
 \algnotext{Function}
+
+
 
 \usepackage{tcolorbox}
 \usepackage{xcolor}
@@ -47,6 +54,12 @@
 \AtBeginEnvironment{alertblock}{\justifying}
 \AtBeginEnvironment{itemize}{\justifying}
 \AtBeginEnvironment{enumerate}{\justifying}
+
+\usefonttheme{default}
+
+\usepackage{unicode-math}
+\setmathfont{Latin Modern Math}
+
 
 \usetikzlibrary{shapes,decorations,decorations.pathreplacing,arrows,calc,arrows.meta,fit,positioning}
 
@@ -259,7 +272,7 @@
 % 	\pause
 % 	\begin{block}{Χρονική πολυπλοκότητα}
 % 		\begin{itemize}
-% 			\item $\mathcal{O}(nm)$ - Σχεδόν ίδια διαδικασία με τον Bellman Ford.			
+% 			\item $O(nm)$ - Σχεδόν ίδια διαδικασία με τον Bellman Ford.			
 % 		\end{itemize}
 % 	\end{block}
 % 	\pause
@@ -300,8 +313,8 @@
 		\begin{align*}
 			C(P) =
 			\begin{cases}
-				\sum_{i = 1}^{\ell - 1} w(v_i, v_{i + 1}), & \ell \leq k, \\
-				\frac{1}{2} \sum_{i = 1}^{\ell - 1} w(v_i, v_{i + 1}), & \ell > k.
+				\displaystyle\sum_{i = 1}^{\ell - 1} w(v_i, v_{i + 1}), & \ell \leq k, \\
+				\displaystyle\sum_{i = 1}^{\ell - 1} \frac{w(v_i, v_{i + 1})}{2}, & \ell > k.
 			\end{cases}
 		\end{align*}
 	\end{itemize}
@@ -328,12 +341,12 @@
 	\\
 	\vspace{0.25cm} 
 	Ο δεύτερος περιορισμός συνεπάγεται ότι το $G$ είναι δέντρο. Μπορούμε λοιπόν να
-	«ριζώσουμε» το δέντρο στην κορυφή $1$, να υπολογίσουμε το μήκος του μονοπατιού $1 - n$, και δεδομένου ότι όλες οι ακμές έχουν το ίδιο βάρος $w^*$ (Περιορισμός 4), πολλαπλασιάζουμε 
+	«ριζώσουμε» το δέντρο στην κορυφή $1$, να υπολογίσουμε το μήκος του μονοπατιού $1 - n$, και δεδομένου ότι όλες οι ακμές έχουν το ίδιο βάρος (Περιορισμός 4), έστω $w^*$, πολλαπλασιάζουμε 
 	το μήκος του μονοπατιού με το $w^*$. Γνωρίζοντας επίσης ότι $k = 1$, διαιρούμε την προηγούμενη ποσότητα με το $2$. Αυτή είναι και η τελική απάντηση.
 	\pause
 	\\
 	\vspace{0.25cm} 
-	Η παραπάνω διαδικασία επιτυγχάνεται με μία διερεύνηση κατά βάθος, η οποία είναι τάξης $\mathcal{O}(n)$, αφού $m \in \mathcal{O}(n)$.
+	Η παραπάνω διαδικασία επιτυγχάνεται με μία διερεύνηση κατά βάθος, η οποία είναι τάξης $O(n)$, αφού $m \in O(n)$.
 \end{frame}
 
 \begin{frame}
@@ -361,7 +374,7 @@
 	\pause
 	\\
 	\vspace{0.25cm} 
-	Αυτό μπορούμε να το πετύχουμε με μία διερεύνηση κατά πλάτος, η οποία είναι τάξης $\mathcal{O}(n + m)$. 
+	Αυτό μπορούμε να το πετύχουμε με μία διερεύνηση κατά πλάτος, η οποία είναι τάξης $O(n + m)$. 
 \end{frame}
 
 \begin{frame}
@@ -448,6 +461,7 @@
 		\begin{align*}
 			2C(P) &= \sum_{r = 1}^{i - 1}  w(v_r, v_{r + 1}) + \sum_{r = i}^{j} w(v_r, v_{r + 1}) + \sum_{r = j + 1}^{\ell - 1} w(v_r, v_{r + 1})
 		\end{align*}
+		\pause
 		και επίσης
 		\begin{align*}
 			2C(P') = \sum_{r = 1}^{i - 1}  w(v_r, v_{r + 1}) + w(v_i, v_{j + 1}) + \sum_{r = j + 1}^{\ell - 1} w(v_r, v_{r + 1}).
@@ -462,9 +476,10 @@
 		\begin{align*}
 			2C(P') - 2C(P) &= w(v_i, v_{j + 1}) - \sum_{r = i}^{j} w(v_r, v_{r + 1}) \\
 			&= w(v_i, v_{j + 1}) - \sum_{r = i}^{j - 1} w(v_r, v_{r + 1}) - w(v_j, v_{j + 1}) \\
-			&= w(v_i, v_{j + 1}) - \sum_{r = i}^{j - 1} w(v_r, v_{r + 1}) - w(v_i, v_{j + 1}) & v_i = v_j \\
-			&= -\sum_{r = i}^{j - 1} w(v_r, v_{r + 1}) < 0. &  w(e) \geq 2
-		\end{align*}
+			&= w(v_i, v_{j + 1}) - \sum_{r = i}^{j - 1} w(v_r, v_{r + 1}) - w(v_i, v_{j + 1}) & (v_i = v_j) \\
+			&= -\sum_{r = i}^{j - 1} w(v_r, v_{r + 1}) < 0, 
+			\end{align*}
+			αφού  $w(e) \geq 2$.
 	\end{block}
 \end{frame}
 
@@ -508,7 +523,7 @@
 			\begin{cases}
 				0, & i = 0 \land v = 1, \\
 				\infty, & i = 0 \land v \neq 1, \\
-				\displaystyle\min_{u \in N(v)}\left\{dp[i - 1][u] + w(v, u) \right\}, & 1 \leq i \leq k + n - 1 \land v \in G.V. 
+				\displaystyle\min_{u \in N(v)}\left\{dp[i - 1][u] + w(v, u) \right\}, & i \geq 1 \land v \in G.V. 
 			\end{cases}
 		\end{align*}
 		\end{itemize}
@@ -524,14 +539,14 @@
 			\min
 			\begin{cases}
 				\displaystyle\min_{1 \leq i \leq n - 1}\{dp[i][n]\}, \\
-				\displaystyle\min_{k \leq i \leq k + n - 1}\left\{dp[i][n]\right\} \cdot \frac{1}{2}.
+				\displaystyle\min_{k \leq i \leq k + n - 1}\left\{\frac{dp[i][n]}{2}\right\}.
 			\end{cases}
 		\end{align*}
 	\end{itemize}
 	\pause
 	\begin{block}{Χρονική πολυπλοκότητα}
 		\begin{itemize}
-			\item $\mathcal{O}(km + kn)$.			
+			\item $O(km + kn)$.			
 		\end{itemize}
 	\end{block}
 	\pause
@@ -559,7 +574,7 @@
 	\begin{itemize}
 		\item Η κορυφή με τον αριθμό $1$ αποτελεί την αφετηρία.
 		\pause
-		\item Οποιαδήποτε άλλη κορυφή είναι προσπελάσιμη από την αφετηρία. \label{prop2}
+		\item Οποιαδήποτε άλλη κορυφή είναι προσπελάσιμη από την αφετηρία. 
 		\pause
 		\item \emph{Σημαντική} είναι κάθε ακμή που η μείωση του βάρους της κατά $1$, επιφέρει αντίστοιχη μείωση στην απόσταση της αφετηρίας προς κάποια άλλη κορυφή.
 		\pause
@@ -608,8 +623,8 @@
 		\vspace{0.25cm} 
 		(Πρώτη περίπτωση). Έστω ότι υπάρχει ακμή $(v, u) \in G.E$, εκτός ΚΑΓ, η οποία είναι σημαντική. 
 		Γνωρίζουμε σίγουρα ότι $u \neq 1$, αφού $d(1) = 0$ και $w(e) \geq 1$, για κάθε $e \in G.E$.
-		Δεδομένου ότι κάθε κορυφή είναι προσπελάσιμη από την αφετηρία (Ιδιότητα \ref{prop2}), έπεται ότι υπάρχει 
-		συντομότερο μονοπάτι από την κορυφή $1$ στη $u$. Έστω $v^*$ η τελευταία κορυφή σε ένα από τα συντομότερα μονοπάτια 
+		Δεδομένου ότι κάθε κορυφή είναι προσπελάσιμη από την αφετηρία (Ιδιότητα 2), έπεται ότι υπάρχει 
+		συντομότερο μονοπάτι από την κορυφή $1$ στη $u$. Έστω $v'$ η τελευταία κορυφή σε ένα από τα συντομότερα μονοπάτια 
 		που καταλήγουν στην $u$.
 	\end{block}
 \end{frame}
@@ -620,7 +635,7 @@
 		 Έχουμε ότι 
 		 \pause
 		\begin{align*}
-			d(v) + w(v, u) > d(v^*) + w(v^*, u) &\Rightarrow d(v) + w(v, u) - 1 \geq d(v^*) + w(v^*, u) \\ %=d(u) \\
+			d(v) + w(v, u) > d(v') + w(v', u) &\Rightarrow d(v) + w(v, u) - 1 \geq d(v') + w(v', u) \\ %=d(u) \\
 			&\Rightarrow d(v) + w(v, u) - 1 \geq d(u).
 		\end{align*}
 		\pause
@@ -696,8 +711,8 @@
 	\pause
 	\begin{block}{Χρονική πολυπλοκότητα}
 		\begin{itemize}
-			\item $\mathcal{O}(n \lg n + m \lg n)$ - \emph{Δυαδικός σωρός}. 
-			\item $\mathcal{O}(n \lg n + m)$ - \emph{Σωρός Fibonacci}.
+			\item $O(n \lg n + m \lg n)$ - \emph{Δυαδικός σωρός}. 
+			\item $O(n \lg n + m)$ - \emph{Σωρός Fibonacci}.
 		\end{itemize}
 	\end{block}
 	\pause
@@ -708,56 +723,4 @@
 \end{frame}
 
 \end{document}
-
-		%Δεδομένου ότι υπάρχουν τουλάχιστον $n$ ακμές στην υποακολουθία $\langle v_{k + 1}, \dots, v_{\ell} \rangle$, γνωρίζουμε σίγουρα ότι 
-		%υπάρχει κύκλος, ονομαστικά $C$, στις θέσεις $i, \dots, j$ της $P$, όπου $k + 1 \leq i < j \leq \ell$. «Κόβωντας» τον $C$ από την $P$ παίρνουμε μία λύση με μικρότερο κόστος
-		%από τη βέλτιστη, αφού $w(e) \geq 2$ (άτοπο). $\blacksquare$
-
-% \begin{align*}
-% 	C' = \min\left\{\min_{1 \leq k \leq i - 1}\left\{w(v_i, v_{i + 1})\right\}\right\}
-% \end{align*}
-
-% \section{Shortcut - USACO $2019$}
-
-% $P = \langle v_1, v_2, \dots, v_{\ell} = n \rangle$
-
-% \begin{frame}
-% 	\frametitle{Shortcut - USACO $2019$}
-% 	\underline{Είσοδος:}
-% 	\pause
-% 	\vspace{0.25cm} 
-% 	\begin{itemize}
-% 		\item Μη κατευθυνόμενο γράφημα $G = \left(V.E\right) : \forall e \in G.E, \; w(e) \in \mathbb{N}_{+}$, όπου $n = G.V$ και $m = G.E$. 
-% 		\pause
-% 		\item $C = \langle c_1, c_2, \dots, c_n\rangle : c_i \in \mathbb{N}, \forall i \in [n]$. 
-% 		\pause
-% 		\item $t \in \mathbb{N}_+$.
-% 	\end{itemize}
-% 	\pause
-% 	\vspace{0.25cm}
-% 	\underline{Ιδιότητες:}
-% 	\pause
-% 	\vspace{0.25cm}
-% 	\begin{itemize}
-% 		\item Η κορυφή $1$ αποτελεί την αφετηρία.
-% 		\pause
-% 		\item Το γράφημα είναι συνεκτικό.
-% 		\pause
-% 		\item Το κόστος της κορυφής $v \in G.V$ είναι ίσο με $d_v \cdot c_v$, όπου $d_v$ η απόσταση της $v$ από την αφετηρία.
-% 	\end{itemize}
-% \end{frame}
-
-% \begin{frame}
-% 	\frametitle{Shortcut - USACO $2019$}
-% 	\underline{Έξοδος:}
-% 	\begin{align*}
-% 		\min_{v \in \{2, \dots, n\}}\left\{\left(\sum_{u \in G.V} d_u \cdot c_u - \sum_{u \in G.V \setminus S_v} d_u \cdot c_u - \sum_{u \in S_v} (d_u - d_v + t) \cdot c_u \right)^+ \right\},	
-% 	\end{align*}
-% 	όπου 
-% 	\begin{align*}
-% 		S_v = \left\{u \in G.V : \text{συντομότερο μονοπάτι προς } u \text{ περνά από v}\right\}.
-% 	\end{align*}
-% \end{frame}
-
-
 
